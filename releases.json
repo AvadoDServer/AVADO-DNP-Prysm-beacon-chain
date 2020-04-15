@@ -1,0 +1,30 @@
+{
+  "0.1.0": {
+    "hash": "/ipfs/QmYYSzJNdEKU1pVcDrsYhStrksDFwFaxRbs1U5EE4jjy5C",
+    "type": "manifest",
+    "uploadedTo": {
+      "dappnode": "Sun, 24 Nov 2019 20:21:36 GMT"
+    }
+  },
+  "0.1.1": {
+    "hash": "/ipfs/QmbcmYMFuUqXEBQLXjewKkgrtpQgU4Vu4g9QbwHYaYZCcv",
+    "type": "manifest",
+    "uploadedTo": {
+      "dappnode": "Wed, 01 Apr 2020 11:04:04 GMT"
+    }
+  },
+  "0.1.2": {
+    "hash": "/ipfs/QmSRoeE45pESYdKXaVSKUXPvaYqULjNEgTboUEUrfUTjb2",
+    "type": "manifest",
+    "uploadedTo": {
+      "dappnode": "Wed, 01 Apr 2020 11:45:14 GMT"
+    }
+  },
+  "0.1.3": {
+    "hash": "/ipfs/QmU89ckWge8ZpfqnjZNkPCSxnmDeFfktCPQURRqq7zdjSp",
+    "type": "manifest",
+    "uploadedTo": {
+      "http://23.254.227.151:5001": "Wed, 15 Apr 2020 13:43:38 GMT"
+    }
+  }
+}
