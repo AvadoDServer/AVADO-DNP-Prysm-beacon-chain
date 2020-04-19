@@ -26,5 +26,33 @@
     "uploadedTo": {
       "http://23.254.227.151:5001": "Wed, 15 Apr 2020 13:43:38 GMT"
     }
+  },
+  "0.1.4": {
+    "hash": "/ipfs/QmbByPFmJH7FsGMWAUg6swEunk3EmkdyevNJ5cYet8Ydp2",
+    "type": "manifest",
+    "uploadedTo": {
+      "http://23.254.227.151:5001": "Sat, 18 Apr 2020 06:30:32 GMT"
+    }
+  },
+  "0.1.5": {
+    "hash": "/ipfs/QmZN8M6b6iy4XFVvF3HfdRhpiGmKN61aaAckKy7VCNbPDu",
+    "type": "manifest",
+    "uploadedTo": {
+      "http://23.254.227.151:5001": "Sat, 18 Apr 2020 06:33:58 GMT"
+    }
+  },
+  "0.1.6": {
+    "hash": "/ipfs/QmP3qkuWF3NDh8BbzXvYgAYK4Xa5cyGgZxJ2phxGNyJrhb",
+    "type": "manifest",
+    "uploadedTo": {
+      "http://23.254.227.151:5001": "Sat, 18 Apr 2020 22:44:44 GMT"
+    }
+  },
+  "0.1.7": {
+    "hash": "/ipfs/QmY2cd1SUEuFNau2VuMYDbQh4J6k5Bm4VwGFMwUxPotnQF",
+    "type": "manifest",
+    "uploadedTo": {
+      "http://23.254.227.151:5001": "Sun, 19 Apr 2020 09:05:34 GMT"
+    }
   }
 }
