@@ -70,10 +70,24 @@
     }
   },
   "0.1.10": {
-    "hash": "/ipfs/Qmd3BASvK3wm9aCJiP4oEViiUEfVGKRERows2pSsqAWeE4",
+    "hash": "/ipfs/Qmb8979DjVCMNHBC7NWxApM8TNhUSzfRUzUV26TpXGh6i8",
     "type": "manifest",
     "uploadedTo": {
-      "http://23.254.227.151:5001": "Mon, 20 Apr 2020 12:07:02 GMT"
+      "http://23.254.227.151:5001": "Mon, 20 Apr 2020 13:32:31 GMT"
+    }
+  },
+  "0.1.11": {
+    "hash": "/ipfs/QmesedXPmdC7cpuQQFhWM6ZJLS7mQncg7QXJAFLyNyCnSy",
+    "type": "manifest",
+    "uploadedTo": {
+      "http://23.254.227.151:5001": "Mon, 20 Apr 2020 18:17:59 GMT"
+    }
+  },
+  "0.1.12": {
+    "hash": "/ipfs/Qme6yt2yuaV1m7BYXAv3sXe8MdsdxtawCF7nbgj3MqiNdD",
+    "type": "manifest",
+    "uploadedTo": {
+      "dappnode": "Mon, 20 Apr 2020 19:08:50 GMT"
     }
   }
 }
