@@ -1,8 +1,8 @@
 {
   "image": {
-    "path": "",
-    "hash": "",
-    "size": "",
+    "path": "prysm-beacon-chain.avado.dnp.dappnode.eth_0.1.13.tar.xz",
+    "hash": "/ipfs/QmSWSMzMLkHiziYqUpAnucnUXQ1KxpHQ2g4g8LEBxcNdcB",
+    "size": 18016332,
     "ports": [
       "4000:4000",
       "8080:8080",
