@@ -1,17 +1,21 @@
 version: '3.4'
 services:
   prysm-beacon-chain.avado.dnp.dappnode.eth:
-    image: 'prysm-beacon-chain.avado.dnp.dappnode.eth:0.1.14'
+    image: 'prysm-beacon-chain.avado.dnp.dappnode.eth:0.1.15'
     build: ./build
     volumes:
       - 'data:/data'
     ports:
       - '4000:4000'
+      - '4001:4001'
+      - '4002:4002'
       - '8080:8080'
       - '12000:12000/udp'
       - '13000:13000'
     restart: always
     environment:
-      - EXTRA_OPTS=--enable-byte-mempool --enable-state-ref-copy
+      - >-
+        EXTRA_OPTS=--enable-byte-mempool --enable-state-ref-copy
+        --grpc-gateway-port 4001
 volumes:
   data: {}
