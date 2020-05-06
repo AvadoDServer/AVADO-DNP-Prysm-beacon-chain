@@ -1,14 +1,14 @@
 {
   "image": {
-    "path": "prysm-beacon-chain.avado.dnp.dappnode.eth_0.1.15.tar.xz",
-    "hash": "/ipfs/QmUbUSiAzk124vRMmj1N2HGBAV8pjxE1pkD5Myz5gKYwti",
-    "size": 28905176,
+    "path": "prysm-beacon-chain.avado.dnp.dappnode.eth_0.1.16.tar.xz",
+    "hash": "/ipfs/QmeWmTsmfmgdj1ZFcoHDsaduoEVyT6PJcj76TVKRk1uQ1U",
+    "size": 28905220,
     "ports": [
       "12000:12000/udp",
       "13000:13000"
     ],
     "environment": [
-      "EXTRA_OPTS=--enable-byte-mempool --enable-state-ref-copy --grpc-gateway-port 4001"
+      "EXTRA_OPTS=--enable-byte-mempool --enable-state-ref-copy"
     ],
     "volumes": [
       "data:/data"
@@ -16,7 +16,7 @@
     "restart": "always"
   },
   "name": "prysm-beacon-chain.avado.dnp.dappnode.eth",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "shortDescription": "Prysm ETH2.0 Beacon chain (Topaz)",
   "description": "Go on and test the upcoming ETH2.0 testnet (Topaz)! This package will install the ETH2.0 Beacon chain (Topaz), which is needed for running a validator. It is based on the Prysm client: a Go implementation of the Ethereum 2.0 Serenity protocol. The beacon chain is at the core of Ethereum 2.0",
   "type": "service",
