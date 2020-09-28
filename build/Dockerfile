@@ -1,4 +1,4 @@
-FROM gcr.io/prysmaticlabs/prysm/beacon-chain:latest as binary
+FROM gcr.io/prysmaticlabs/prysm/beacon-chain:v1.0.0-alpha.23 as binary
 
 # FROM alpine
 
@@ -40,7 +40,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisord.conf
 
 ADD ./entrypoint.sh /entrypoint
-#ADD ./envoy.yaml /etc/envoy/envoy.yaml
 
 RUN chmod a+x /entrypoint
 
