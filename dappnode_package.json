@@ -1,11 +1,13 @@
 {
   "image": {
-    "path": "prysm-beacon-chain.avado.dnp.dappnode.eth_0.1.17.tar.xz",
-    "hash": "/ipfs/QmPtqB4PaXa8iwUnFc67iruMmJrAq3sPsrdmTe74E6GW3R",
-    "size": 28898552,
+    "path": "prysm-beacon-chain.avado.dnp.dappnode.eth_0.3.10.tar.xz",
+    "hash": "/ipfs/QmWg6DWtRMKKTQGBkgmJGm7aMGBaSfjbDSEsJNnjP28uEL",
+    "size": 28399544,
     "ports": [
       "12000:12000/udp",
-      "13000:13000"
+      "13000:13000",
+      "4000:4000",
+      "4002:4002"
     ],
     "environment": [
       "EXTRA_OPTS="
@@ -16,9 +18,10 @@
     "restart": "always"
   },
   "name": "prysm-beacon-chain.avado.dnp.dappnode.eth",
-  "version": "0.1.17",
-  "shortDescription": "Prysm ETH2.0 Beacon chain (Topaz)",
-  "description": "Go on and test the upcoming ETH2.0 testnet (Topaz)! This package will install the ETH2.0 Beacon chain (Topaz), which is needed for running a validator. It is based on the Prysm client: a Go implementation of the Ethereum 2.0 Serenity protocol. The beacon chain is at the core of Ethereum 2.0",
+  "version": "0.3.10",
+  "upstream": "v1.0.0-alpha.23",
+  "shortDescription": "Prysm ETH2.0 Beacon chain (Medalla)",
+  "description": "Go on and test the upcoming ETH2.0 testnet (Medalla)! This package will install the ETH2.0 Beacon chain (Medalla), which is needed for running a validator. It is based on the Prysm client: a Go implementation of the Ethereum 2.0 Serenity protocol. The beacon chain is at the core of Ethereum 2.0",
   "type": "service",
   "author": "AVADO",
   "license": "GPL-3.0",
