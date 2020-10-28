@@ -1,4 +1,5 @@
-FROM gcr.io/prysmaticlabs/prysm/beacon-chain:v1.0.0-alpha.23 as binary
+ARG VERSION
+FROM gcr.io/prysmaticlabs/prysm/beacon-chain:$VERSION as binary
 
 # FROM alpine
 

@@ -1,8 +1,8 @@
 {
   "image": {
-    "path": "prysm-beacon-chain.avado.dnp.dappnode.eth_0.3.10.tar.xz",
-    "hash": "/ipfs/QmWg6DWtRMKKTQGBkgmJGm7aMGBaSfjbDSEsJNnjP28uEL",
-    "size": 28399544,
+    "path": "prysm-beacon-chain.avado.dnp.dappnode.eth_0.3.13.tar.xz",
+    "hash": "/ipfs/QmXskAa45QsPc8vBCiim53aE12FeoCRcdT5Q6apoEExeXk",
+    "size": 29564400,
     "ports": [
       "12000:12000/udp",
       "13000:13000",
@@ -10,7 +10,7 @@
       "4002:4002"
     ],
     "environment": [
-      "EXTRA_OPTS="
+      "EXTRA_OPTS=--block-batch-limit 500"
     ],
     "volumes": [
       "data:/data"
@@ -18,8 +18,10 @@
     "restart": "always"
   },
   "name": "prysm-beacon-chain.avado.dnp.dappnode.eth",
-  "version": "0.3.10",
-  "upstream": "v1.0.0-alpha.23",
+  "autoupdate": true,
+  "title": "ETH2.0 Prysm beadon chain",
+  "version": "0.3.13",
+  "upstream": "v1.0.0-beta.0.rc",
   "shortDescription": "Prysm ETH2.0 Beacon chain (Medalla)",
   "description": "Go on and test the upcoming ETH2.0 testnet (Medalla)! This package will install the ETH2.0 Beacon chain (Medalla), which is needed for running a validator. It is based on the Prysm client: a Go implementation of the Ethereum 2.0 Serenity protocol. The beacon chain is at the core of Ethereum 2.0",
   "type": "service",

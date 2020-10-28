@@ -1,8 +1,11 @@
 version: '3.4'
 services:
   prysm-beacon-chain.avado.dnp.dappnode.eth:
-    image: 'prysm-beacon-chain.avado.dnp.dappnode.eth:0.3.10'
-    build: ./build
+    image: 'prysm-beacon-chain.avado.dnp.dappnode.eth:0.3.13'
+    build:
+      context: ./build
+      args:
+        - VERSION=v1.0.0-beta.0.rc
     volumes:
       - 'data:/data'
     ports:
@@ -13,6 +16,6 @@ services:
       - '13000:13000'
     restart: always
     environment:
-      - EXTRA_OPTS=
+      - EXTRA_OPTS="--block-batch-limit 500"
 volumes:
   data: {}
