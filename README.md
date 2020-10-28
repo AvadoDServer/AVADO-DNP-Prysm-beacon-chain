@@ -1,7 +1,7 @@
 # AVADO-DNP-Prysm-beacon-chain
 
 
-# Release new verions
+# Release new version
 
 - `dappnodesdk increase patch`
 - `dappnodesdk build --provider http://23.254.227.151:5001`
