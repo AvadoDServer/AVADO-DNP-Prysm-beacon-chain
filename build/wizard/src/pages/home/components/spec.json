@@ -1,0 +1,3096 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Ethereum Serenity APIs",
+    "description": "[![Build status](https://badge.buildkite.com/62be08099e9e228b165c2dba69c637eb9ca7a1ca95efd54b9f.svg?branch=master)](https://buildkite.com/prysmatic-labs/ethereum-apis)[![Discord](https://user-images.githubusercontent.com/7288322/34471967-1df7808a-efbb-11e7-9088-ed0b04151291.png)](https://discord.gg/KSA7rPr)[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/prysmaticlabs/geth-sharding?utm_source=badge\u0026utm_medium=badge\u0026utm_campaign=pr-badge)[![ETH2.0_Spec_Version 0.11.1](https://img.shields.io/badge/ETH2.0%20Spec%20Version-v0.11.1-blue.svg)](https://github.com/ethereum/eth2.0-specs/tree/v0.11.1)\n\nThis swagger site hosts the service interface definitions for the Ethereum Serenity JSON API.\n\n## Service Overview\n\nAt the core of Ethereum Serenity lies the \"Beacon Chain\", a proof-of-stake based blockchain managing a set of validators and \"shards\" across a network, which are stateful, smaller blockchains used for transaction and smart contract execution. The Beacon Chain reconciles consensus results across shards to provide the backbone of Ethereum Serenity. The services below allow for retrieval of current and historical information relating to validators, consensus, blocks, and staking participation.\n\n| Package | Service | Version | Description |\n|---------|---------|---------|-------------|\n| eth | BeaconChain | v1alpha1 | This service is used to retrieve critical data relevant to the Ethereum 2.0 phase 0 beacon chain, including the most recent head block, current pending deposits, the chain state and more. |\n| eth | Node | v1alpha1 | The Node service returns information about the Ethereum node itself, including versioning and general information as well as network sync status and a list of services currently implemented on the node.\n| eth | Validator | v1alpha1 | This API provides the information a validator needs to retrieve throughout its lifecycle, including recieved assignments from the network, its current index in the state, as well the rewards and penalties that have been applied to it.\n\n### JSON Mapping\n\nThe majority of field primitive types for Ethereum are either `bytes` or `uint64`. The canonical JSON mapping for those fields are a Base64 encoded string for `bytes`, or a string representation of `uint64`. Since JavaScript loses precision for values over [MAX_SAFE_INTEGER](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER), uint64 must be a JSON string in order to accommodate those values. If the field value not changed and is still set to protobuf's default, this field will be omitted from the JSON encoding entirely.\n\nFor more details on JSON mapping for other types, view the relevant section in the [proto3 language guide](https://developers.google.com/protocol-buffers/docs/proto3#json).\n\n### Helpful gRPC Tooling and Resources\n\n- [Google's API Style Guide](https://cloud.google.com/apis/design/)\n- [Language reference for protoc3](https://developers.google.com/protocol-buffers/docs/proto3)\n- [Awesome gRPC](https://github.com/grpc-ecosystem/awesome-grpc)\n- [Protocol Buffer Basics: Go](https://developers.google.com/protocol-buffers/docs/gotutorial)\n- [Transcoding gRPC to JSON/HTTP using Envoy](https://blog.jdriven.com/2018/11/transcoding-grpc-to-http-json-using-envoy/)\n\n\n## Contributing\nWe have put all of our contribution guidelines into [CONTRIBUTING.md](https://github.com/prysmaticlabs/prysm/blob/master/CONTRIBUTING.md)! Check it out to get started.",
+    "version": "v1alpha1",
+    "license": {
+      "name": "Licenced under Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "host": "prysm-beacon-chain-mainnet.avadopackage.com:3500",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json",
+    "application/grpc-web-text",
+    "application/grpc-web-json"
+  ],
+  "produces": [
+    "application/json",
+    "application/grpc-web-text",
+    "application/grpc-web-json"
+  ],
+  "paths": {
+    "/eth/v1alpha1/beacon/attestations": {
+      "get": {
+        "summary": "Retrieve attestations by block root, slot, or epoch.",
+        "description": "The server may return an empty list when no attestations match the given\nfilter criteria. This RPC should not return NOT_FOUND. Only one filter\ncriteria should be used. This endpoint allows for retrieval of genesis\ninformation via a boolean query filter.",
+        "operationId": "ListAttestations",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ListAttestationsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "epoch",
+            "description": "Filter attestations by epoch processed.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "genesisEpoch",
+            "description": "Optional criteria to retrieve attestations from 0 epoch.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          },
+          {
+            "name": "pageSize",
+            "description": "The maximum number of Attestations to return in the response.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "A pagination token returned from a previous call to `ListAttestations`\nthat indicates where this listing should continue from.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/attestations/indexed": {
+      "get": {
+        "summary": "Retrieve indexed attestations by block root, slot, or epoch.",
+        "description": "The server may return an empty list when no indexed attestations match the given\nfilter criteria. This RPC should not return NOT_FOUND. Only one filter\ncriteria should be used. This endpoint allows for retrieval of genesis\ninformation via a boolean query filter.",
+        "operationId": "ListIndexedAttestations",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ListIndexedAttestationsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "epoch",
+            "description": "Retrieve attestations by epoch processed.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "genesisEpoch",
+            "description": "Optional criteria to retrieve genesis epoch attestations.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          },
+          {
+            "name": "pageSize",
+            "description": "The maximum number of IndexedAttestations to return in the response.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "A pagination token returned from a previous call to `ListIndexedAttestations`\nthat indicates where this listing should continue from.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/attestations/indexed/stream": {
+      "get": {
+        "summary": "Server-side stream of indexed attestations as they are received by\nthe beacon chain node.",
+        "operationId": "StreamIndexedAttestations",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/v1alpha1IndexedAttestation"
+            }
+          }
+        },
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/attestations/pool": {
+      "get": {
+        "summary": "Retrieve attestations from pool.",
+        "description": "The server returns a list of attestations that have been seen but not\nyet processed. Pool attestations eventually expire as the slot\nadvances, so an attestation missing from this request does not imply\nthat it was included in a block. The attestation may have expired.\nRefer to the ethereum 2.0 specification for more details on how\nattestations are processed and when they are no longer valid.\nhttps://github.com/ethereum/eth2.0-specs/blob/dev/specs/core/0_beacon-chain.md#attestations",
+        "operationId": "AttestationPool",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1AttestationPoolResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "description": "The maximum number of objects to return in the response.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "A pagination token returned from a previous call\nthat indicates where this listing should continue from.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/attestations/stream": {
+      "get": {
+        "summary": "Server-side stream of attestations as they are received by\nthe beacon chain node.",
+        "operationId": "StreamAttestations",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/v1alpha1Attestation"
+            }
+          }
+        },
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/blocks": {
+      "get": {
+        "summary": "Retrieve blocks by root, slot, or epoch.",
+        "description": "The server may return multiple blocks in the case that a slot or epoch is\nprovided as the filter criteria. The server may return an empty list when\nno blocks in their database match the filter criteria. This RPC should\nnot return NOT_FOUND. Only one filter criteria should be used. This endpoint\nallows for retrieval of genesis information via a boolean query filter.",
+        "operationId": "ListBlocks",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ListBlocksResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "root",
+            "description": "Block root filter to return a single block.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "slot",
+            "description": "Slot to lookup a block. If the slot is not yet finalized, this\ncriteria may yield multiple valid blocks if the node has seen blocks\nfrom another fork.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "epoch",
+            "description": "The epoch number for which to retrieve blocks. If specified, this\nwill return all blocks found within the span of the specified epoch.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "genesis",
+            "description": "Optional criteria to retrieve genesis block.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          },
+          {
+            "name": "pageSize",
+            "description": "The maximum number of Blocks to return in the response.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "A pagination token returned from a previous call to `ListBlocks`\nthat indicates where this listing should continue from.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/blocks/stream": {
+      "get": {
+        "summary": "Server-side stream of all signed blocks as they are received by\nthe beacon chain node.",
+        "operationId": "StreamBlocks",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/v1alpha1SignedBeaconBlock"
+            }
+          }
+        },
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/chainhead": {
+      "get": {
+        "summary": "Retrieve information about the head of the beacon chain from the view of\nthe beacon chain node.",
+        "description": "This includes the head block slot and root as well as information about\nthe most recent finalized and justified slots.",
+        "operationId": "GetChainHead",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ChainHead"
+            }
+          }
+        },
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/chainhead/stream": {
+      "get": {
+        "summary": "Server-side stream of information about the head of the beacon chain\nfrom the view of the beacon chain node.",
+        "description": "This includes the head block slot and root as well as information about\nthe most recent finalized and justified slots.",
+        "operationId": "StreamChainHead",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/v1alpha1ChainHead"
+            }
+          }
+        },
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/committees": {
+      "get": {
+        "summary": "Retrieve the beacon chain committees for a given epoch.",
+        "description": "If no filter criteria is specified, the response returns\nall beacon committees for the current epoch. The results are paginated by default.\nThis endpoint allows for retrieval of genesis information via a boolean query filter.",
+        "operationId": "ListBeaconCommittees",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1BeaconCommittees"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "epoch",
+            "description": "Optional criteria to retrieve data at a specific epoch.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "genesis",
+            "description": "Optional criteria to retrieve genesis data.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/config": {
+      "get": {
+        "summary": "Retrieve the current configuration parameters of the beacon chain.",
+        "operationId": "GetBeaconConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1BeaconConfig"
+            }
+          }
+        },
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/slashings/attester/submit": {
+      "get": {
+        "summary": "Submit an attester slashing object to the beacon node.",
+        "operationId": "SubmitAttesterSlashing",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1SubmitSlashingResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "attestation_1.attestingIndices",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uint64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "attestation_1.data.slot",
+            "description": "Slot of the attestation attesting for.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "attestation_1.data.committeeIndex",
+            "description": "The committee index that submitted this attestation.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "attestation_1.data.beaconBlockRoot",
+            "description": "32 byte root of the LMD GHOST block vote.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "attestation_1.data.source.epoch",
+            "description": "Epoch the checkpoint references.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "attestation_1.data.source.root",
+            "description": "Block root of the checkpoint references.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "attestation_1.data.target.epoch",
+            "description": "Epoch the checkpoint references.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "attestation_1.data.target.root",
+            "description": "Block root of the checkpoint references.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "attestation_1.signature",
+            "description": "96 bytes aggregate signature.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "attestation_2.attestingIndices",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uint64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "attestation_2.data.slot",
+            "description": "Slot of the attestation attesting for.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "attestation_2.data.committeeIndex",
+            "description": "The committee index that submitted this attestation.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "attestation_2.data.beaconBlockRoot",
+            "description": "32 byte root of the LMD GHOST block vote.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "attestation_2.data.source.epoch",
+            "description": "Epoch the checkpoint references.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "attestation_2.data.source.root",
+            "description": "Block root of the checkpoint references.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "attestation_2.data.target.epoch",
+            "description": "Epoch the checkpoint references.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "attestation_2.data.target.root",
+            "description": "Block root of the checkpoint references.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "attestation_2.signature",
+            "description": "96 bytes aggregate signature.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/slashings/proposer/submit": {
+      "get": {
+        "summary": "Submit a proposer slashing object to the beacon node.",
+        "operationId": "SubmitProposerSlashing",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1SubmitSlashingResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "header_1.header.slot",
+            "description": "Beacon chain slot that this block represents.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "header_1.header.proposerIndex",
+            "description": "Validator index of the validator that proposed the block header.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "header_1.header.parentRoot",
+            "description": "32 byte merkle tree root of the parent ssz encoded block.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "header_1.header.stateRoot",
+            "description": "32 byte merkle tree root of the resulting ssz encoded state after processing this block.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "header_1.header.bodyRoot",
+            "description": "32 byte merkle tree root of the ssz encoded block body.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "header_1.signature",
+            "description": "96 byte BLS signature from the validator that produced this block header.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "header_2.header.slot",
+            "description": "Beacon chain slot that this block represents.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "header_2.header.proposerIndex",
+            "description": "Validator index of the validator that proposed the block header.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "header_2.header.parentRoot",
+            "description": "32 byte merkle tree root of the parent ssz encoded block.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "header_2.header.stateRoot",
+            "description": "32 byte merkle tree root of the resulting ssz encoded state after processing this block.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "header_2.header.bodyRoot",
+            "description": "32 byte merkle tree root of the ssz encoded block body.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "header_2.signature",
+            "description": "96 byte BLS signature from the validator that produced this block header.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/beacon/validators/info/stream": {
+      "get": {
+        "summary": "Server-side stream of validator information at each epoch.",
+        "operationId": "StreamValidatorsInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/v1alpha1ValidatorInfo"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "action",
+            "description": "Action (add/remove/set).\n\n - ADD_VALIDATOR_KEYS: ADD_VALIDATOR_KEYS adds to the existing keys.\n - REMOVE_VALIDATOR_KEYS: REMOVE_VALIDATOR_KEYS removes from the existing keys.\n - SET_VALIDATOR_KEYS: SET_VALIDATOR_KEYS overwrites the existing keys.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ADD_VALIDATOR_KEYS",
+              "REMOVE_VALIDATOR_KEYS",
+              "SET_VALIDATOR_KEYS"
+            ],
+            "default": "ADD_VALIDATOR_KEYS"
+          },
+          {
+            "name": "publicKeys",
+            "description": "48 byte BLS public keys of validators on which the operation occurs.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/node/genesis": {
+      "get": {
+        "summary": "Retrieve information about the genesis of Ethereum 2.0.",
+        "operationId": "GetGenesis",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1Genesis"
+            }
+          }
+        },
+        "tags": [
+          "Node"
+        ]
+      }
+    },
+    "/eth/v1alpha1/node/peers": {
+      "get": {
+        "summary": "Retrieve the list of peers currently connected to this node.",
+        "operationId": "ListPeers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1Peers"
+            }
+          }
+        },
+        "tags": [
+          "Node"
+        ]
+      }
+    },
+    "/eth/v1alpha1/node/services": {
+      "get": {
+        "summary": "Retrieve the list of services implemented and enabled by this node.",
+        "description": "Any service not present in this list may return UNIMPLEMENTED or\nPERMISSION_DENIED. The server may also support fetching services by grpc\nreflection.",
+        "operationId": "ListImplementedServices",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ImplementedServices"
+            }
+          }
+        },
+        "tags": [
+          "Node"
+        ]
+      }
+    },
+    "/eth/v1alpha1/node/syncing": {
+      "get": {
+        "summary": "Retrieve the current network sync status of the node.",
+        "operationId": "GetSyncStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1SyncStatus"
+            }
+          }
+        },
+        "tags": [
+          "Node"
+        ]
+      }
+    },
+    "/eth/v1alpha1/node/version": {
+      "get": {
+        "summary": "Retrieve information about the running Ethereum 2.0 node.",
+        "operationId": "GetVersion",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1Version"
+            }
+          }
+        },
+        "tags": [
+          "Node"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator": {
+      "get": {
+        "summary": "Retrieve information about a specific validator in the registry.",
+        "description": "This request may query by validator index or public key.",
+        "operationId": "GetValidator",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1Validator"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "index",
+            "description": "Validator index in the registry.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "publicKey",
+            "description": "48 byte validator public key.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator/activation/stream": {
+      "get": {
+        "summary": "WaitForActivation checks if a validator public key exists in the active validator\nregistry of the current beacon state. If the validator is NOT yet active, it starts a\nserver-side stream which updates the client whenever the validator becomes active in\nthe beacon node's state.",
+        "description": "The input to this endpoint is a list of validator public keys, and the corresponding\nstream will respond until at least a single corresponding validator to those\nkeys is activated.",
+        "operationId": "WaitForActivation",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/v1alpha1ValidatorActivationResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "publicKeys",
+            "description": "A list of 48 byte validator public keys.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator/aggregate": {
+      "post": {
+        "summary": "Submit a signed aggregate and proof object, the beacon node will broadcast the\nsigned aggregated attestation and proof object.",
+        "operationId": "SubmitSignedAggregateSelectionProof",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1SignedAggregateSubmitResponse"
+            }
+          }
+        },
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator/attestation": {
+      "get": {
+        "summary": "Retrieves the latest valid attestation data to be attested on the beacon chain.",
+        "description": "The server returns the latest valid data which represents the correct vote\nfor the head of the beacon chain,",
+        "operationId": "GetAttestationData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1AttestationData"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "slot",
+            "description": "Slot for which the attestation should be created.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "committeeIndex",
+            "description": "Committee index the attestation should be created for.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      },
+      "post": {
+        "summary": "Sends the newly signed attestation to beacon node.",
+        "description": "The validator sends the newly signed attestation to the beacon node for the attestation to\nbe included in the beacon chain. The beacon node is expected to validate and publish attestation on\nappropriate committee subnet.",
+        "operationId": "ProposeAttestation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1AttestResponse"
+            }
+          }
+        },
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator/block": {
+      "get": {
+        "summary": "Retrieves the latest valid beacon block to be proposed on the beacon chain.",
+        "description": "The server returns a new beacon block, without proposer signature, that can be\nproposed on the beacon chain. The block should be filled with all the necessary\ndata for proposer to sign.",
+        "operationId": "GetBlock",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1BeaconBlock"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "slot",
+            "description": "Slot for which the block should be proposed.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "randaoReveal",
+            "description": "Validator's 32 byte randao reveal secret of the current epoch.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          },
+          {
+            "name": "graffiti",
+            "description": "Validator's 32 byte graffiti message for the new block.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          }
+        ],
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      },
+      "post": {
+        "summary": "Sends the newly signed beacon block to beacon node.",
+        "description": "The validator sends the newly signed beacon block to the beacon node so the beacon block can\nbe included in the beacon chain. The beacon node is expected to validate and process the\nbeacon block into its state.",
+        "operationId": "ProposeBlock",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ProposeResponse"
+            }
+          }
+        },
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator/chainstart/stream": {
+      "get": {
+        "summary": "WaitForChainStart queries the logs of the Validator Deposit Contract on the Ethereum\nproof-of-work chain to verify the beacon chain has started its runtime and\nvalidators are ready to begin their responsibilities.",
+        "description": "If the chain has not yet started, this endpoint starts a server-side stream which updates\nthe client when the beacon chain is ready.\n\nThis RPC is deprecated. Please use WaitForSynced.",
+        "operationId": "WaitForChainStart",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/v1alpha1ChainStartResponse"
+            }
+          }
+        },
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator/domain": {
+      "get": {
+        "summary": "DomainData fetches the current BLS signature domain version information from the\nrunning beacon node's state. This information is used when validators sign\nblocks and attestations appropriately based on their duty.",
+        "operationId": "DomainData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1DomainResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "epoch",
+            "description": "The epoch for which the domain is being requested.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "domain",
+            "description": "The bytes domain specified by the validator.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          }
+        ],
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator/duties": {
+      "get": {
+        "summary": "Retrieves validator duties for the requested validators.",
+        "description": "The duties consist of:\n  Proposer - the validator that creates a beacon chain block.\n  Attester — a validator that is part of a committee that needs to sign off on a beacon chain\n   block while simultaneously creating a cross link to a recent shard block on a particular shard chain.\nThe server returns a list of duties which are the actions should be performed by validators for a given epoch.\nValidator duties should be polled every epoch, but due to chain reorg of \u003eMIN_SEED_LOOKAHEAD could occur,\nthe validator duties could chain. For complete safety, it is recommended to poll at every slot to ensure\nvalidator is fully aware of any sudden chain reorg.",
+        "operationId": "GetDuties",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1DutiesResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "epoch",
+            "description": "Epoch at which validators should perform their duties.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "publicKeys",
+            "description": "Array of byte encoded BLS public keys.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator/exit": {
+      "post": {
+        "summary": "Propose to leave the list of active validators.",
+        "description": "The beacon node is expected to validate the request and make it available for inclusion in\nthe next proposed block.",
+        "operationId": "ProposeExit",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          }
+        },
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator/index": {
+      "get": {
+        "summary": "ValidatorIndex retrieves a validator's index location in the beacon state's\nvalidator registry looking up whether the validator exists based on its\npublic key. This method returns NOT_FOUND if no index is found for the public key\nspecified in the request.",
+        "operationId": "ValidatorIndex",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ValidatorIndexResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "publicKey",
+            "description": "A 48 byte validator public key.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          }
+        ],
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator/status": {
+      "get": {
+        "summary": "ValidatorStatus returns a validator's status based on the current epoch.\nThe request can specify either a validator's public key or validator index.",
+        "description": "The status response can be one of the following:\n\tDEPOSITED - validator's deposit has been recognized by Ethereum 1, not yet recognized by Ethereum 2.\n\tPENDING - validator is in Ethereum 2's activation queue.\n\tACTIVE - validator is active.\n\tEXITING - validator has initiated an an exit request, or has dropped below the ejection balance and is being kicked out.\n\tEXITED - validator is no longer validating.\n\tSLASHING - validator has been kicked out due to meeting a slashing condition.\n\tUNKNOWN_STATUS - validator does not have a known status in the network.",
+        "operationId": "ValidatorStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ValidatorStatusResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "publicKey",
+            "description": "A 48 byte validator public key.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "byte"
+          }
+        ],
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator/subnet/subscribe": {
+      "post": {
+        "summary": "Subscribe to particular committee ID subnets given validator's duty.",
+        "description": "The beacon node is expected to subscribe to the committee ID subnet given by the request. With this,\nbeacon node serving attesters can find persistent peers on the subnet to publish attestation,\nand beacon node serving aggregator can join the subnet.",
+        "operationId": "SubscribeCommitteeSubnets",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          }
+        },
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validator/synced/stream": {
+      "get": {
+        "summary": "WaitForSynced checks if the beacon node is synced and ready to communicate with the validator.",
+        "description": "If the node is not synced yet, this endpoint starts a server-side stream which updates\nthe validator client when the beacon chain is ready.",
+        "operationId": "WaitForSynced",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "$ref": "#/x-stream-definitions/v1alpha1SyncedResponse"
+            }
+          }
+        },
+        "tags": [
+          "BeaconNodeValidator"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validators": {
+      "get": {
+        "summary": "Retrieve the current validator registry.",
+        "description": "The request may include an optional historical epoch to retrieve a\nspecific validator set in time. This endpoint allows for retrieval of genesis\ninformation via a boolean query filter.",
+        "operationId": "ListValidators",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1Validators"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "epoch",
+            "description": "Optional criteria to retrieve validators at a specific epoch.\nOmitting this field or setting it to zero will retrieve a response\nwith the current active validator set.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "genesis",
+            "description": "Optional criteria to retrieve the genesis set of validators.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          },
+          {
+            "name": "active",
+            "description": "Specify whether or not you want to retrieve only active validators.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          },
+          {
+            "name": "pageSize",
+            "description": "The maximum number of Validators to return in the response.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "A pagination token returned from a previous call to `GetValidators`\nthat indicates where this listing should continue from.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "publicKeys",
+            "description": "Specify which validators you would like to retrieve by their public keys.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "indices",
+            "description": "Specify which validators you would like to retrieve by their indices.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uint64"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validators/activesetchanges": {
+      "get": {
+        "summary": "Retrieve the active set changes for a given epoch.",
+        "description": "This data includes any activations, voluntary exits, and involuntary\nejections. This endpoint allows for retrieval of genesis\ninformation via a boolean query filter.",
+        "operationId": "GetValidatorActiveSetChanges",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ActiveSetChanges"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "epoch",
+            "description": "Optional criteria to retrieve balances at a specific epoch.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "genesis",
+            "description": "Optional criteria to retrieve the genesis list of balances.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validators/assignments": {
+      "get": {
+        "summary": "Retrieve the validator assignments for a given epoch.",
+        "description": "This request may specify optional validator indices or public keys to\nfilter validator assignments. This endpoint allows for retrieval of genesis\ninformation via a boolean query filter.",
+        "operationId": "ListValidatorAssignments",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ValidatorAssignments"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "epoch",
+            "description": "Epoch to validator assignments for.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "genesis",
+            "description": "Whether or not to query for the genesis information.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          },
+          {
+            "name": "publicKeys",
+            "description": "48 byte validator public keys to filter assignments for the given epoch.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "indices",
+            "description": "Validator indicies to filter assignments for the given epoch.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uint64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "pageSize",
+            "description": "The maximum number of ValidatorAssignments to return in the response.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "A pagination token returned from a previous call to `ListValidatorAssignments`\nthat indicates where this listing should continue from.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validators/balances": {
+      "get": {
+        "summary": "Retrieve validator balances for a given set of public keys at a specific\nepoch in time. This endpoint allows for retrieval of genesis information\nvia a boolean query filter.",
+        "operationId": "ListValidatorBalances",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ValidatorBalances"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "epoch",
+            "description": "Optional criteria to retrieve balances at a specific epoch.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "genesis",
+            "description": "Optional criteria to retrieve the genesis list of balances.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          },
+          {
+            "name": "publicKeys",
+            "description": "Validator 48 byte BLS public keys to filter validators for the given\nepoch.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "indices",
+            "description": "Validator indices to filter validators for the given epoch.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uint64"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "pageSize",
+            "description": "The maximum number of Validators to return in the response.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "description": "A pagination token returned from a previous call to `GetValidators`\nthat indicates where this listing should continue from.\nThis field is optional.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validators/participation": {
+      "get": {
+        "summary": "Retrieve the validator participation information for a given epoch.",
+        "description": "This method returns information about the global participation of\nvalidator attestations. This endpoint allows for retrieval of genesis\ninformation via a boolean query filter.",
+        "operationId": "GetValidatorParticipation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ValidatorParticipationResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "epoch",
+            "description": "Epoch to request participation information.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "genesis",
+            "description": "Whether or not to query for the genesis information.",
+            "in": "query",
+            "required": false,
+            "type": "boolean",
+            "format": "boolean"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validators/performance": {
+      "get": {
+        "summary": "GetValidatorPerformance reports a validator's latest balance along with other important\nmetrics on rewards and penalties throughout its lifecycle in the beacon chain.\nThe request takes in a list of validator public keys and returns a performance report\nfor all of them respectively.",
+        "operationId": "GetValidatorPerformance",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ValidatorPerformanceResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "publicKeys",
+            "description": "A list of 48 byte validator public keys.",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    },
+    "/eth/v1alpha1/validators/queue": {
+      "get": {
+        "summary": "Retrieve the current validator queue information.",
+        "operationId": "GetValidatorQueue",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1alpha1ValidatorQueue"
+            }
+          }
+        },
+        "tags": [
+          "BeaconChain"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "BeaconCommitteesCommitteeItem": {
+      "type": "object",
+      "properties": {
+        "validatorIndices": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "A committee is a list of validator indices participating in consensus at a slot."
+        }
+      }
+    },
+    "BeaconCommitteesCommitteesList": {
+      "type": "object",
+      "properties": {
+        "committees": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BeaconCommitteesCommitteeItem"
+          },
+          "description": "A list of committees."
+        }
+      }
+    },
+    "DepositData": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string",
+          "format": "byte",
+          "description": "48 byte BLS public key of the validator."
+        },
+        "withdrawalCredentials": {
+          "type": "string",
+          "format": "byte",
+          "description": "A 32 byte hash of the withdrawal address public key."
+        },
+        "amount": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Deposit amount in gwei."
+        },
+        "signature": {
+          "type": "string",
+          "format": "byte",
+          "description": "96 byte signature from the validators public key."
+        }
+      }
+    },
+    "DutiesResponseDuty": {
+      "type": "object",
+      "properties": {
+        "committee": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "The committee a validator is assigned to."
+        },
+        "committeeIndex": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The index into the committee where the validator belongs in."
+        },
+        "attesterSlot": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Slot at which a validator must attest."
+        },
+        "proposerSlots": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "Slots at which a validator must propose a beacon chain block."
+        },
+        "publicKey": {
+          "type": "string",
+          "format": "byte",
+          "description": "48 byte BLS public key for the validator who's assigned to perform a duty."
+        },
+        "status": {
+          "$ref": "#/definitions/v1alpha1ValidatorStatus",
+          "description": "The current status of the validator assigned to perform the duty."
+        },
+        "validatorIndex": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The index of the validator in the beacon state."
+        }
+      }
+    },
+    "ValidatorActivationResponseStatus": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string",
+          "format": "byte",
+          "description": "A 48 byte validator public key."
+        },
+        "status": {
+          "$ref": "#/definitions/v1alpha1ValidatorStatusResponse",
+          "description": "A wrapper representing a validator's status object."
+        }
+      }
+    },
+    "ValidatorAssignmentsCommitteeAssignment": {
+      "type": "object",
+      "properties": {
+        "beaconCommittees": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "Beacon committees is responsible for crosslinking committee data back to the beacon chain,\nthey also attest and produce beacon chain blocks. This is a list of validator indices that\nare in the same committee as requested validator, everyone in the committee is assigned to the\nsame slot and same committee."
+        },
+        "committeeIndex": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Committee index represents the committee of validator that's in."
+        },
+        "attesterSlot": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Beacon chain slot in which the validator must perform its assigned\nduty as an attester."
+        },
+        "proposerSlots": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "Beacon chain slots in which the validator must perform its assigned\nduty as a proposer."
+        },
+        "publicKey": {
+          "type": "string",
+          "format": "byte",
+          "description": "48 byte BLS public key."
+        },
+        "validatorIndex": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Validator index in the beacon state."
+        }
+      }
+    },
+    "ValidatorBalancesBalance": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string",
+          "format": "byte",
+          "description": "Validator's 48 byte BLS public key."
+        },
+        "index": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Validator's index in the validator set."
+        },
+        "balance": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Validator's balance in gwei."
+        }
+      }
+    },
+    "ValidatorsValidatorContainer": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "validator": {
+          "$ref": "#/definitions/v1alpha1Validator"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string",
+          "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+        },
+        "value": {
+          "type": "string",
+          "format": "byte",
+          "description": "Must be a valid serialized protocol buffer of the above specified type."
+        }
+      },
+      "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+    },
+    "runtimeStreamError": {
+      "type": "object",
+      "properties": {
+        "grpcCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "httpCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "httpStatus": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1alpha1ActiveSetChanges": {
+      "type": "object",
+      "properties": {
+        "epoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Epoch which the state was considered to determine the active validator\nset."
+        },
+        "activatedPublicKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "byte"
+          },
+          "description": "48 byte validator public keys that have been activated in the given epoch."
+        },
+        "activatedIndices": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "Indices of validators activated in the given epoch."
+        },
+        "exitedPublicKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "byte"
+          },
+          "description": "48 byte validator public keys that have been voluntarily exited in the given epoch."
+        },
+        "exitedIndices": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "Indices of validators exited in the given epoch."
+        },
+        "slashedPublicKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "byte"
+          },
+          "description": "48 byte validator public keys that have been slashed in the given epoch."
+        },
+        "slashedIndices": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "Indices of validators slashed in the given epoch."
+        },
+        "ejectedPublicKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "byte"
+          },
+          "description": "48 byte validator public keys that have been involuntarily ejected in this epoch."
+        },
+        "ejectedIndices": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "Indices of validators ejected in the given epoch."
+        }
+      }
+    },
+    "v1alpha1AggregateAttestationAndProof": {
+      "type": "object",
+      "properties": {
+        "aggregatorIndex": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The aggregator index that submitted this aggregated attestation and proof."
+        },
+        "aggregate": {
+          "$ref": "#/definitions/v1alpha1Attestation",
+          "description": "The aggregated attestation that was submitted."
+        },
+        "selectionProof": {
+          "type": "string",
+          "format": "byte",
+          "description": "96 byte selection proof signed by the aggregator, which is the signature of the slot to aggregate."
+        }
+      }
+    },
+    "v1alpha1AggregateSelectionResponse": {
+      "type": "object",
+      "properties": {
+        "aggregateAndProof": {
+          "$ref": "#/definitions/v1alpha1AggregateAttestationAndProof",
+          "description": "The aggregate and proof message without the signature."
+        }
+      }
+    },
+    "v1alpha1AttestResponse": {
+      "type": "object",
+      "properties": {
+        "attestationDataRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "The root of the attestation data successfully submitted to the beacon node."
+        }
+      }
+    },
+    "v1alpha1Attestation": {
+      "type": "object",
+      "properties": {
+        "aggregationBits": {
+          "type": "string",
+          "format": "byte",
+          "description": "A bitfield representation of validator indices that have voted exactly\nthe same vote and have been aggregated into this attestation."
+        },
+        "data": {
+          "$ref": "#/definitions/v1alpha1AttestationData"
+        },
+        "signature": {
+          "type": "string",
+          "format": "byte",
+          "description": "96 byte BLS aggregate signature."
+        }
+      }
+    },
+    "v1alpha1AttestationData": {
+      "type": "object",
+      "properties": {
+        "slot": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Slot of the attestation attesting for."
+        },
+        "committeeIndex": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The committee index that submitted this attestation."
+        },
+        "beaconBlockRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "32 byte root of the LMD GHOST block vote."
+        },
+        "source": {
+          "$ref": "#/definitions/v1alpha1Checkpoint",
+          "title": "The most recent justified checkpoint in the beacon state"
+        },
+        "target": {
+          "$ref": "#/definitions/v1alpha1Checkpoint",
+          "title": "The checkpoint attempting to be justified for the current epoch and its epoch boundary block"
+        }
+      }
+    },
+    "v1alpha1AttestationPoolResponse": {
+      "type": "object",
+      "properties": {
+        "attestations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1alpha1Attestation"
+          },
+          "description": "List of attestations currently in the pool of the beacon chain."
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A pagination token returned from a previous call\nthat indicates where this listing should continue from.\nThis field is optional."
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total count of objects matching the request filter."
+        }
+      }
+    },
+    "v1alpha1AttesterSlashing": {
+      "type": "object",
+      "properties": {
+        "attestation1": {
+          "$ref": "#/definitions/v1alpha1IndexedAttestation",
+          "description": "First conflicting attestation."
+        },
+        "attestation2": {
+          "$ref": "#/definitions/v1alpha1IndexedAttestation",
+          "description": "Second conflicting attestation."
+        }
+      },
+      "description": "Attestor slashings are proofs that a slashable offense has been committed by\nattestating to two conflicting pieces of information by the same validator."
+    },
+    "v1alpha1BeaconBlock": {
+      "type": "object",
+      "properties": {
+        "slot": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Beacon chain slot that this block represents."
+        },
+        "proposerIndex": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Validator index of the validator that proposed the block header."
+        },
+        "parentRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "32 byte root of the parent block."
+        },
+        "stateRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "32 byte root of the resulting state after processing this block."
+        },
+        "body": {
+          "$ref": "#/definitions/v1alpha1BeaconBlockBody",
+          "description": "The block body itself."
+        }
+      },
+      "description": "The Ethereum 2.0 beacon block. The message does not contain a validator signature."
+    },
+    "v1alpha1BeaconBlockBody": {
+      "type": "object",
+      "properties": {
+        "randaoReveal": {
+          "type": "string",
+          "format": "byte",
+          "description": "The validators RANDAO reveal 96 byte value."
+        },
+        "eth1Data": {
+          "$ref": "#/definitions/v1alpha1Eth1Data",
+          "description": "A reference to the Ethereum 1.x chain."
+        },
+        "graffiti": {
+          "type": "string",
+          "format": "byte",
+          "description": "32 byte field of arbitrary data. This field may contain any data and\nis not used for anything other than a fun message."
+        },
+        "proposerSlashings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1alpha1ProposerSlashing"
+          },
+          "description": "At most MAX_PROPOSER_SLASHINGS."
+        },
+        "attesterSlashings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1alpha1AttesterSlashing"
+          },
+          "description": "At most MAX_ATTESTER_SLASHINGS."
+        },
+        "attestations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1alpha1Attestation"
+          },
+          "description": "At most MAX_ATTESTATIONS."
+        },
+        "deposits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1alpha1Deposit"
+          },
+          "description": "At most MAX_DEPOSITS."
+        },
+        "voluntaryExits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1alpha1SignedVoluntaryExit"
+          },
+          "description": "At most MAX_VOLUNTARY_EXITS."
+        }
+      },
+      "description": "The block body of an Ethereum 2.0 beacon block."
+    },
+    "v1alpha1BeaconBlockContainer": {
+      "type": "object",
+      "properties": {
+        "block": {
+          "$ref": "#/definitions/v1alpha1SignedBeaconBlock",
+          "description": "The contained Ethereum beacon block."
+        },
+        "blockRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "32 byte merkle tree root of contained beacon block."
+        }
+      },
+      "description": "A container that contains both the beacon block\nand its corresponding root."
+    },
+    "v1alpha1BeaconBlockHeader": {
+      "type": "object",
+      "properties": {
+        "slot": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Beacon chain slot that this block represents."
+        },
+        "proposerIndex": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Validator index of the validator that proposed the block header."
+        },
+        "parentRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "32 byte merkle tree root of the parent ssz encoded block."
+        },
+        "stateRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "32 byte merkle tree root of the resulting ssz encoded state after processing this block."
+        },
+        "bodyRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "32 byte merkle tree root of the ssz encoded block body."
+        }
+      },
+      "description": "A beacon block header is essentially a beacon block with only a reference to\nthe beacon body as a 32 byte merkle tree root. This type of message is more\nlightweight than a full beacon block. The message does not contain\na validator signature."
+    },
+    "v1alpha1BeaconCommittees": {
+      "type": "object",
+      "properties": {
+        "epoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The epoch for which the committees in the response belong to."
+        },
+        "committees": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/BeaconCommitteesCommitteesList"
+          },
+          "description": "A map of validator committees by slot."
+        },
+        "activeValidatorCount": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The number of active validators at the given epoch."
+        }
+      }
+    },
+    "v1alpha1BeaconConfig": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Information about the configuration parameters of the beacon node, such\nas the slots per epoch, slots per eth1 voting period, and more."
+    },
+    "v1alpha1ChainHead": {
+      "type": "object",
+      "properties": {
+        "headSlot": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Slot of the head block."
+        },
+        "headEpoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Epoch of the head block."
+        },
+        "headBlockRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "32 byte merkle tree root of the canonical head block in the beacon node."
+        },
+        "finalizedSlot": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Most recent slot that contains the finalized block."
+        },
+        "finalizedEpoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Epoch of the finalized block."
+        },
+        "finalizedBlockRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "Most recent 32 byte finalized block root."
+        },
+        "justifiedSlot": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Most recent slot that contains the justified block."
+        },
+        "justifiedEpoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Epoch of the justified block."
+        },
+        "justifiedBlockRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "Most recent 32 byte justified block root."
+        },
+        "previousJustifiedSlot": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Most recent slot that contains the previous justified block."
+        },
+        "previousJustifiedEpoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Epoch of the previous justified block."
+        },
+        "previousJustifiedBlockRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "Previous 32 byte justified block root."
+        }
+      },
+      "description": "Information about the head of the beacon chain."
+    },
+    "v1alpha1ChainStartResponse": {
+      "type": "object",
+      "properties": {
+        "started": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": "A boolean specifying whether or not the chain has started."
+        },
+        "genesisTime": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The genesis time of the beacon chain."
+        }
+      }
+    },
+    "v1alpha1Checkpoint": {
+      "type": "object",
+      "properties": {
+        "epoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Epoch the checkpoint references."
+        },
+        "root": {
+          "type": "string",
+          "format": "byte",
+          "description": "Block root of the checkpoint references."
+        }
+      }
+    },
+    "v1alpha1Deposit": {
+      "type": "object",
+      "properties": {
+        "proof": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "byte"
+          },
+          "description": "32 byte roots in the deposit tree branch."
+        },
+        "data": {
+          "$ref": "#/definitions/DepositData"
+        }
+      },
+      "description": "Deposit into the Ethereum 2.0 from the Ethereum 1.x deposit contract."
+    },
+    "v1alpha1DomainResponse": {
+      "type": "object",
+      "properties": {
+        "signatureDomain": {
+          "type": "string",
+          "format": "byte",
+          "description": "The signature domain is a byte array used by validators when\nsigning data related to block proposals and attestations."
+        }
+      }
+    },
+    "v1alpha1DutiesResponse": {
+      "type": "object",
+      "properties": {
+        "duties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DutiesResponseDuty"
+          }
+        }
+      }
+    },
+    "v1alpha1Eth1Data": {
+      "type": "object",
+      "properties": {
+        "depositRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "The 32 byte deposit tree root for the last deposit included in this\nblock."
+        },
+        "depositCount": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The total number of deposits included in the beacon chain since genesis\nincluding the deposits in this block."
+        },
+        "blockHash": {
+          "type": "string",
+          "format": "byte",
+          "description": "The 32 byte block hash of the Ethereum 1.x block considered for deposit\ninclusion."
+        }
+      },
+      "description": "Eth1Data represents references to the Ethereum 1.x deposit contract."
+    },
+    "v1alpha1Genesis": {
+      "type": "object",
+      "properties": {
+        "genesisTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "UTC time specified in the chain start event in the deposit contract."
+        },
+        "depositContractAddress": {
+          "type": "string",
+          "format": "byte",
+          "description": "Address of the deposit contract in the Ethereum 1 chain."
+        },
+        "genesisValidatorsRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "Root of the genesis validators deposits; used for domain separation\nwhen signing data structures for this chain."
+        }
+      },
+      "description": "Information about the genesis of Ethereum 2.0."
+    },
+    "v1alpha1ImplementedServices": {
+      "type": "object",
+      "properties": {
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "v1alpha1IndexedAttestation": {
+      "type": "object",
+      "properties": {
+        "attestingIndices": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          }
+        },
+        "data": {
+          "$ref": "#/definitions/v1alpha1AttestationData"
+        },
+        "signature": {
+          "type": "string",
+          "format": "byte",
+          "description": "96 bytes aggregate signature."
+        }
+      }
+    },
+    "v1alpha1ListAttestationsResponse": {
+      "type": "object",
+      "properties": {
+        "attestations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1alpha1Attestation"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A pagination token returned from a previous call to `ListAttestations`\nthat indicates from where listing should continue.\nThis field is optional."
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total count of Attestations matching the request filter."
+        }
+      }
+    },
+    "v1alpha1ListBlocksResponse": {
+      "type": "object",
+      "properties": {
+        "blockContainers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1alpha1BeaconBlockContainer"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A pagination token returned from a previous call to `ListBlocks`\nthat indicates from where listing should continue.\nThis field is optional."
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total count of Blocks matching the request filter."
+        }
+      }
+    },
+    "v1alpha1ListIndexedAttestationsResponse": {
+      "type": "object",
+      "properties": {
+        "indexedAttestations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1alpha1IndexedAttestation"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A pagination token returned from a previous call to `ListIndexedAttestations`\nthat indicates from where listing should continue.\nThis field is optional."
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total count of Attestations matching the request filter."
+        }
+      }
+    },
+    "v1alpha1Peer": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "title": "The address of the peer, as a full multiaddr, for example:\n/ip4/37.221.192.134/tcp/13000/p2p/16Uiu2HAm8maLMjag1TAUM52zPfmLbVMGFdwUAWgoHu1HDQLR6e17"
+        },
+        "direction": {
+          "$ref": "#/definitions/v1alpha1PeerDirection",
+          "description": "The direction of the connection (inbound/outbound)."
+        }
+      },
+      "description": "Peer provides details of a peer on the network."
+    },
+    "v1alpha1PeerDirection": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "INBOUND",
+        "OUTBOUND"
+      ],
+      "default": "UNKNOWN",
+      "description": "PeerDirection states the direction of the connection to a peer."
+    },
+    "v1alpha1Peers": {
+      "type": "object",
+      "properties": {
+        "peers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1alpha1Peer"
+          }
+        }
+      },
+      "description": "Peers is a list of peer messages."
+    },
+    "v1alpha1ProposeResponse": {
+      "type": "object",
+      "properties": {
+        "blockRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "The block root of the successfully proposed beacon block."
+        }
+      }
+    },
+    "v1alpha1ProposerSlashing": {
+      "type": "object",
+      "properties": {
+        "header1": {
+          "$ref": "#/definitions/v1alpha1SignedBeaconBlockHeader",
+          "description": "First conflicting signed block header."
+        },
+        "header2": {
+          "$ref": "#/definitions/v1alpha1SignedBeaconBlockHeader",
+          "description": "Second conflicting signed block header."
+        }
+      },
+      "description": "Proposer slashings are proofs that a slashable offense has been committed by\nproposing two conflicting blocks from the same validator."
+    },
+    "v1alpha1SetAction": {
+      "type": "string",
+      "enum": [
+        "ADD_VALIDATOR_KEYS",
+        "REMOVE_VALIDATOR_KEYS",
+        "SET_VALIDATOR_KEYS"
+      ],
+      "default": "ADD_VALIDATOR_KEYS",
+      "description": "SetAction defines the type of action that should be applied to the keys in a validator change set.\n\n - ADD_VALIDATOR_KEYS: ADD_VALIDATOR_KEYS adds to the existing keys.\n - REMOVE_VALIDATOR_KEYS: REMOVE_VALIDATOR_KEYS removes from the existing keys.\n - SET_VALIDATOR_KEYS: SET_VALIDATOR_KEYS overwrites the existing keys."
+    },
+    "v1alpha1SignedAggregateAttestationAndProof": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "$ref": "#/definitions/v1alpha1AggregateAttestationAndProof",
+          "description": "The aggregated attestation and selection proof itself."
+        },
+        "signature": {
+          "type": "string",
+          "format": "byte",
+          "description": "96 byte BLS aggregate signature signed by the aggregator over the message."
+        }
+      }
+    },
+    "v1alpha1SignedAggregateSubmitResponse": {
+      "type": "object",
+      "properties": {
+        "attestationDataRoot": {
+          "type": "string",
+          "format": "byte",
+          "description": "The 32 byte hash tree root of the aggregated attestation data."
+        }
+      }
+    },
+    "v1alpha1SignedBeaconBlock": {
+      "type": "object",
+      "properties": {
+        "block": {
+          "$ref": "#/definitions/v1alpha1BeaconBlock",
+          "description": "The unsigned beacon block itself."
+        },
+        "signature": {
+          "type": "string",
+          "format": "byte",
+          "description": "96 byte BLS signature from the validator that produced this block."
+        }
+      },
+      "description": "The signed version of beacon block."
+    },
+    "v1alpha1SignedBeaconBlockHeader": {
+      "type": "object",
+      "properties": {
+        "header": {
+          "$ref": "#/definitions/v1alpha1BeaconBlockHeader",
+          "description": "The unsigned beacon block header itself."
+        },
+        "signature": {
+          "type": "string",
+          "format": "byte",
+          "description": "96 byte BLS signature from the validator that produced this block header."
+        }
+      }
+    },
+    "v1alpha1SignedVoluntaryExit": {
+      "type": "object",
+      "properties": {
+        "exit": {
+          "$ref": "#/definitions/v1alpha1VoluntaryExit",
+          "description": "The unsigned voluntary exit itself."
+        },
+        "signature": {
+          "type": "string",
+          "format": "byte",
+          "title": "Validator's 96 byte signature"
+        }
+      },
+      "description": "The signed version of voluntary exit."
+    },
+    "v1alpha1SubmitSlashingResponse": {
+      "type": "object",
+      "properties": {
+        "slashedIndices": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "Indices of the validators to be slashed by the submitted\nproposer/attester slashing object."
+        }
+      }
+    },
+    "v1alpha1SyncStatus": {
+      "type": "object",
+      "properties": {
+        "syncing": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": "Whether or not the node is currently syncing."
+        }
+      },
+      "description": "Information about the current network sync status of the node."
+    },
+    "v1alpha1SyncedResponse": {
+      "type": "object",
+      "properties": {
+        "synced": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": "A boolean specifying whether or not the beacon node is synced and ready for the validator."
+        },
+        "genesisTime": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The genesis time of the beacon chain."
+        }
+      }
+    },
+    "v1alpha1Validator": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string",
+          "format": "byte",
+          "description": "48 byte BLS public key used for the validator's activities."
+        },
+        "withdrawalCredentials": {
+          "type": "string",
+          "format": "byte",
+          "description": "32 byte hash of the withdrawal destination public key."
+        },
+        "effectiveBalance": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The validators current effective balance in gwei."
+        },
+        "slashed": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": "Whether or not the validator has been slashed."
+        },
+        "activationEligibilityEpoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Epoch when the validator became eligible for activation. This field may\nbe zero if the validator was present in the Ethereum 2.0 genesis. This\nfield is FAR_FUTURE_EPOCH if the validator has not been activated."
+        },
+        "activationEpoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Epoch when the validator was activated. This field may be zero if the\nvalidator was present in the Ethereum 2.0 genesis. This field is\nFAR_FUTURE_EPOCH if the validator has not been activated."
+        },
+        "exitEpoch": {
+          "type": "string",
+          "format": "uint64",
+          "title": "Epoch when the validator was exited. This field is FAR_FUTURE_EPOCH if\nthe validator has not exited.\nFAR_FUTURE_EPOCH is a constant defined by the official Ethereum 2.0 specification:\nhttps://github.com/ethereum/eth2.0-specs/blob/v0.9.2/specs/core/0_beacon-chain.md#constants"
+        },
+        "withdrawableEpoch": {
+          "type": "string",
+          "format": "uint64",
+          "title": "Epoch when the validator is eligible to withdraw their funds. This field\nis FAR_FUTURE_EPOCH if the validator has not exited.\nFAR_FUTURE_EPOCH is a constant defined by the official Ethereum 2.0 specification:\nhttps://github.com/ethereum/eth2.0-specs/blob/v0.9.2/specs/core/0_beacon-chain.md#constants"
+        }
+      },
+      "description": "An Ethereum 2.0 validator."
+    },
+    "v1alpha1ValidatorActivationResponse": {
+      "type": "object",
+      "properties": {
+        "statuses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ValidatorActivationResponseStatus"
+          },
+          "description": "A list of validator statuses mapped 1-to-1 with the public keys\nin the request."
+        }
+      }
+    },
+    "v1alpha1ValidatorAssignments": {
+      "type": "object",
+      "properties": {
+        "epoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The epoch for which this set of validator assignments is valid."
+        },
+        "assignments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ValidatorAssignmentsCommitteeAssignment"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A pagination token returned from a previous call to `ListValidatorAssignmentsRequest`\nthat indicates where this listing should continue from.\nThis field is optional."
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total count of CommitteeAssignments matching the request filter."
+        }
+      }
+    },
+    "v1alpha1ValidatorBalances": {
+      "type": "object",
+      "properties": {
+        "epoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Epoch which the state was considered to determine the validator balances."
+        },
+        "balances": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ValidatorBalancesBalance"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A pagination token returned from a previous call to `GetListValidatorBalances`\nthat indicates from where listing should continue."
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total count of items matching the request filter."
+        }
+      }
+    },
+    "v1alpha1ValidatorIndexResponse": {
+      "type": "object",
+      "properties": {
+        "index": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The validator's index in the beacon chain state's validator registry."
+        }
+      }
+    },
+    "v1alpha1ValidatorInfo": {
+      "type": "object",
+      "properties": {
+        "publicKey": {
+          "type": "string",
+          "format": "byte",
+          "description": "The validator's 48 byte BLS public key."
+        },
+        "index": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The validator's index in the beacon state."
+        },
+        "epoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The epoch for which the information pertains."
+        },
+        "status": {
+          "$ref": "#/definitions/v1alpha1ValidatorStatus",
+          "description": "The validator's current status."
+        },
+        "transitionTimestamp": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The unix timestamp when the validator enters the next state.\nThis could be in the past.  Some values depend on chain operation and so will vary from epoch to epoch.\nSpecific times for each state are as follows:\n- state == DEPOSITED: time at which Ethereum 1 deposit will be stored on-chain by Ethereum 2 (variable, can be 0).\n- state == PENDING: time at which validator will be activated (variable).\n- state == ACTIVE: no value (next transition depends on user and network actions).\n- state == EXITING: time at which validator will exit.\n- state == SLASHING: time at which validator will exit.\n- state == EXITED: time at which validator funds will be withdrawable."
+        },
+        "balance": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The validator's current balance in GWei."
+        },
+        "effectiveBalance": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The validator's current effective balance in GWei.\nOnly valid for states ACTIVE, EXITING, SLASHING."
+        }
+      },
+      "description": "ValidatorInfo gives information about the state of a validator at a certain epoch."
+    },
+    "v1alpha1ValidatorParticipation": {
+      "type": "object",
+      "properties": {
+        "globalParticipationRate": {
+          "type": "number",
+          "format": "float",
+          "description": "Percentage of validator participation in the given epoch. This field\ncontains a value between 0 and 1."
+        },
+        "votedEther": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The total amount of ether, in gwei, that has been used in voting."
+        },
+        "eligibleEther": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The total amount of ether, in gwei, that is eligible for voting."
+        }
+      },
+      "description": "ValidatorParticipation stores participation metrics during a given epoch."
+    },
+    "v1alpha1ValidatorParticipationResponse": {
+      "type": "object",
+      "properties": {
+        "epoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Epoch which this message is applicable."
+        },
+        "finalized": {
+          "type": "boolean",
+          "format": "boolean",
+          "description": "Whether or not epoch has been finalized."
+        },
+        "participation": {
+          "$ref": "#/definitions/v1alpha1ValidatorParticipation",
+          "description": "The actual validator participation metrics."
+        }
+      }
+    },
+    "v1alpha1ValidatorPerformanceResponse": {
+      "type": "object",
+      "properties": {
+        "currentEffectiveBalances": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "A list of validator effective balances mapped 1-to-1 with the request's\npublic keys."
+        },
+        "inclusionSlots": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "The slot of when validator's attestation got included in the chain at previous epoch, the slot\nis mapped 1-to-1 with the request's public keys."
+        },
+        "inclusionDistances": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "The distance of when validator submitted and got included in the chain, the distance\nis mapped 1-to-1 with the request's public keys."
+        },
+        "correctlyVotedSource": {
+          "type": "array",
+          "items": {
+            "type": "boolean",
+            "format": "boolean"
+          },
+          "description": "Whether the list of validator recently correctly voted for source at previous epoch, the result\nis mapped 1-to-1 with the request's public keys."
+        },
+        "correctlyVotedTarget": {
+          "type": "array",
+          "items": {
+            "type": "boolean",
+            "format": "boolean"
+          },
+          "description": "Whether the list of validator recently correctly voted for target at previous epoch, the result\nis mapped 1-to-1 with the request's public keys."
+        },
+        "correctlyVotedHead": {
+          "type": "array",
+          "items": {
+            "type": "boolean",
+            "format": "boolean"
+          },
+          "description": "Whether the list of validator recently correctly voted for head at previous epoch, the result\nis mapped 1-to-1 with the request's public keys."
+        },
+        "balancesBeforeEpochTransition": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "The balance of validators before epoch transition, the balance is mapped 1-to-1 with the requests's\npublic keys."
+        },
+        "balancesAfterEpochTransition": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "The balance of validators after epoch transition, the balance is mapped 1-to-1 with the requests's\npublic keys."
+        },
+        "missingValidators": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "byte"
+          },
+          "description": "The total number of validators from the request not found in\nin the beacon chain."
+        },
+        "averageActiveValidatorBalance": {
+          "type": "number",
+          "format": "float",
+          "description": "The average active validator balance in the beacon chain."
+        }
+      }
+    },
+    "v1alpha1ValidatorQueue": {
+      "type": "object",
+      "properties": {
+        "churnLimit": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The amount of ether in gwei allowed to enter or exit the active\nvalidator set."
+        },
+        "activationPublicKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "byte"
+          },
+          "description": "Ordered list of 48 byte public keys awaiting activation. 0th index is the\nnext key to be processed."
+        },
+        "exitPublicKeys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "byte"
+          },
+          "description": "Ordered list of public keys awaiting exit. 0th index is the next key to\nbe processed."
+        },
+        "activationValidatorIndices": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "Ordered list of validator indices awaiting activation. 0th item in the list is the\nnext validator index to be processed."
+        },
+        "exitValidatorIndices": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          },
+          "description": "Ordered list of validator indices awaiting exit. 0th item in the list is the\nnext validator index to be processed."
+        }
+      }
+    },
+    "v1alpha1ValidatorStatus": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN_STATUS",
+        "DEPOSITED",
+        "PENDING",
+        "ACTIVE",
+        "EXITING",
+        "SLASHING",
+        "EXITED"
+      ],
+      "default": "UNKNOWN_STATUS"
+    },
+    "v1alpha1ValidatorStatusResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1alpha1ValidatorStatus",
+          "description": "The corresponding validator status."
+        },
+        "eth1DepositBlockNumber": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The block number of the Ethereum proof-of-work chain\nwhere the deposit for the validator was included."
+        },
+        "depositInclusionSlot": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The slot in the beacon chain in which the validator's\ndeposit was included in a block."
+        },
+        "activationEpoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The epoch in the beacon chain in which the validator\nis determined as active."
+        },
+        "positionInActivationQueue": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The position in the activation queue of pending validators."
+        }
+      }
+    },
+    "v1alpha1Validators": {
+      "type": "object",
+      "properties": {
+        "epoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Epoch which the state was considered to determine the active validator\nset. This field is not optional. Zero value epoch indicates the validator\nset is from the Ethereum 2.0 genesis set."
+        },
+        "validatorList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ValidatorsValidatorContainer"
+          }
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "A pagination token returned from a previous call to `GetValidators`\nthat indicates from where listing should continue.\nThis field is optional."
+        },
+        "totalSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Total count of Validators matching the request filter."
+        }
+      }
+    },
+    "v1alpha1Version": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "A string that uniquely identifies the node and its version."
+        },
+        "metadata": {
+          "type": "string",
+          "description": "Additional metadata that the node would like to provide. This field may\nbe used to list any meaningful data to the client."
+        }
+      },
+      "description": "Information about the node version."
+    },
+    "v1alpha1VoluntaryExit": {
+      "type": "object",
+      "properties": {
+        "epoch": {
+          "type": "string",
+          "format": "uint64",
+          "description": "The epoch on when exit request becomes valid."
+        },
+        "validatorIndex": {
+          "type": "string",
+          "format": "uint64",
+          "description": "Index of the exiting validator."
+        }
+      },
+      "description": "A message that represents a validator signaling that they want to voluntarily\nwithdraw from the active validator set. The message does not contain a\nvalidator signature."
+    }
+  },
+  "x-stream-definitions": {
+    "v1alpha1Attestation": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/v1alpha1Attestation"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of v1alpha1Attestation"
+    },
+    "v1alpha1ChainHead": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/v1alpha1ChainHead"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of v1alpha1ChainHead"
+    },
+    "v1alpha1ChainStartResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/v1alpha1ChainStartResponse"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of v1alpha1ChainStartResponse"
+    },
+    "v1alpha1DutiesResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/v1alpha1DutiesResponse"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of v1alpha1DutiesResponse"
+    },
+    "v1alpha1IndexedAttestation": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/v1alpha1IndexedAttestation"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of v1alpha1IndexedAttestation"
+    },
+    "v1alpha1SignedBeaconBlock": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/v1alpha1SignedBeaconBlock"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of v1alpha1SignedBeaconBlock"
+    },
+    "v1alpha1SyncedResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/v1alpha1SyncedResponse"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of v1alpha1SyncedResponse"
+    },
+    "v1alpha1ValidatorActivationResponse": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/v1alpha1ValidatorActivationResponse"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of v1alpha1ValidatorActivationResponse"
+    },
+    "v1alpha1ValidatorInfo": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/v1alpha1ValidatorInfo"
+        },
+        "error": {
+          "$ref": "#/definitions/runtimeStreamError"
+        }
+      },
+      "title": "Stream result of v1alpha1ValidatorInfo"
+    }
+  },
+  "externalDocs": {
+    "description": "Ethereum 2.0 Specification on Github",
+    "url": "https://github.com/ethereum/eth2.0-specs"
+  }
+}

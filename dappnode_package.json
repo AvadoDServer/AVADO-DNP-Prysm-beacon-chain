@@ -1,31 +1,32 @@
 {
   "image": {
-    "path": "prysm-beacon-chain.avado.dnp.dappnode.eth_0.3.13.tar.xz",
-    "hash": "/ipfs/QmXskAa45QsPc8vBCiim53aE12FeoCRcdT5Q6apoEExeXk",
-    "size": 29564400,
+    "path": "prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth_0.0.15.tar.xz",
+    "hash": "/ipfs/QmT13xdENZPVa3xDT2Wi3nfnC6oHdab8hS2myYoKJQX2qV",
+    "size": 56065956,
     "ports": [
       "12000:12000/udp",
-      "13000:13000",
-      "4000:4000",
-      "4002:4002"
+      "13000:13000"
     ],
     "environment": [
-      "EXTRA_OPTS=--block-batch-limit 500"
+      "EXTRA_OPTS=--http-web3provider=http://my.ethchain-geth.public.dappnode.eth:8545 --grpc-gateway-corsdomain=http://prysm-beacon-chain-mainnet.avadopackage.com,http://eth2validator.avadopackage.com"
     ],
     "volumes": [
       "data:/data"
     ],
     "restart": "always"
   },
-  "name": "prysm-beacon-chain.avado.dnp.dappnode.eth",
+  "name": "prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth",
   "autoupdate": true,
-  "title": "ETH2.0 Prysm beadon chain",
-  "version": "0.3.13",
-  "upstream": "v1.0.0-beta.0.rc",
-  "shortDescription": "Prysm ETH2.0 Beacon chain (Medalla)",
-  "description": "Go on and test the upcoming ETH2.0 testnet (Medalla)! This package will install the ETH2.0 Beacon chain (Medalla), which is needed for running a validator. It is based on the Prysm client: a Go implementation of the Ethereum 2.0 Serenity protocol. The beacon chain is at the core of Ethereum 2.0",
+  "title": "ETH2.0 Prysm beacon chain",
+  "version": "0.0.15",
+  "upstream": "v1.0.5",
+  "shortDescription": "Prysm ETH2.0 Beacon chain (Mainnet)",
+  "description": "ETH2 Mainnet beacon chain",
   "type": "service",
   "author": "AVADO",
-  "license": "GPL-3.0",
-  "avatar": "/ipfs/QmZDjWTdaRURFqpw9EDnZW84NE8oQDQX83wLVfmEPZ8yX9"
+  "license": "(c)",
+  "avatar": "/ipfs/Qmf7yFka8z2QLRrDyT1ESNRwP9a1tdufEEtBghXHFUEQEP",
+  "links": {
+    "OnboardingWizard": "http://prysm-beacon-chain-mainnet.avadopackage.com/"
+  }
 }

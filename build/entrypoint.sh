@@ -5,7 +5,15 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-COMMAND="app/beacon-chain/image.binary.runfiles/prysm/beacon-chain/linux_amd64_stripped/image.binary --rpc-host=0.0.0.0 --rpc-port=4000 --datadir=/data --accept-terms-of-use --grpc-gateway-port 4001 --log-file=/data/beacon-chain.log ${EXTRA_OPTS}"
+COMMAND="/bin/beaconchain \
+  --mainnet \
+  --datadir=/data \
+  --rpc-host=0.0.0.0 \
+  --grpc-gateway-host=0.0.0.0 \
+  --monitoring-host=0.0.0.0 \
+  --grpc-gateway-port=3500 \
+  --accept-terms-of-use \
+  $EXTRA_OPTS"
 
 supervisord -c /etc/supervisord.conf &
 

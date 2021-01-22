@@ -1,40 +1,34 @@
 ARG VERSION
-FROM gcr.io/prysmaticlabs/prysm/beacon-chain:$VERSION as binary
 
-# FROM alpine
+FROM node:10.15.3 as build-deps-wizard
 
-# WORKDIR /
-# COPY --from=binary / .
+# build wizard
+WORKDIR /usr/src/app/wizard
+COPY wizard .
+RUN yarn
+RUN rm -Rf build && yarn run build
 
-# ADD entrypoint.sh /entrypoint.sh
-# RUN chmod 755 /entrypoint.sh
+WORKDIR /app/
+ENV DOWNLOAD_URL https://github.com/prysmaticlabs/prysm/releases/download
+ENV BINARY_URL $DOWNLOAD_URL/v1.0.5/beacon-chain-v1.0.5-linux-amd64
 
-
-# ENTRYPOINT /entrypoint.sh
-
-
-#FROM envoyproxy/envoy-alpine:v1.14.1 as envoy
-
-
-
-# FROM alpine
-# RUN apk add --no-cache bash
-
-FROM alpine
-
-# RUN addgroup -g 1000 -S www-data \
-#  && adduser -u 1000 -D -S -G www-data www-data
-
-#RUN adduser nginx --disabled-password --home /
-
-RUN apk add --no-cache supervisor nginx bash
-
-# RUN apt update && \ 
-#     apt install -y ca-certificates nginx bash supervisor && \
-#     rm -rf /var/lib/apt/lists/*
+RUN wget $BINARY_URL -O beaconchain && \
+    chmod +x  beaconchain
+RUN ls -l
 
 
-COPY --from=binary / .
+FROM debian:buster-slim
+
+RUN apt update && \
+    apt install -y ca-certificates supervisor nginx bash && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN useradd nginx
+
+# copy wizard
+COPY --from=build-deps-wizard /usr/src/app/wizard/build /usr/src/monitor/wizard
+# copy BC executable
+COPY --from=build-deps-wizard /app/beaconchain /bin/beaconchain
 
 # Add config files
 COPY nginx.conf /etc/nginx/nginx.conf
@@ -45,4 +39,3 @@ ADD ./entrypoint.sh /entrypoint
 RUN chmod a+x /entrypoint
 
 ENTRYPOINT /entrypoint
-#/entrypoint
