@@ -10,7 +10,7 @@ RUN rm -Rf build && yarn run build
 
 WORKDIR /app/
 ENV DOWNLOAD_URL https://github.com/prysmaticlabs/prysm/releases/download
-ENV BINARY_URL $DOWNLOAD_URL/v1.0.5/beacon-chain-v1.0.5-linux-amd64
+ENV BINARY_URL $DOWNLOAD_URL/v1.1.0/beacon-chain-v1.1.0-linux-amd64
 
 RUN wget $BINARY_URL -O beaconchain && \
     chmod +x  beaconchain
