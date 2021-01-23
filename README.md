@@ -1,6 +1,4 @@
-# AVADO package template
-
-This is a template for creating AVADO packages yourself.
+# AVADO Prysm ETH2 beacon chain
 
 ## Prerequisites
  
