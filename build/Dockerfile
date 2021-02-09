@@ -1,6 +1,5 @@
-ARG VERSION
-
 FROM node:10.15.3 as build-deps-wizard
+ARG VERSION
 
 # build wizard
 WORKDIR /usr/src/app/wizard
@@ -10,7 +9,7 @@ RUN rm -Rf build && yarn run build
 
 WORKDIR /app/
 ENV DOWNLOAD_URL https://github.com/prysmaticlabs/prysm/releases/download
-ENV BINARY_URL $DOWNLOAD_URL/v1.1.0/beacon-chain-v1.1.0-linux-amd64
+ENV BINARY_URL ${DOWNLOAD_URL}/${VERSION}/beacon-chain-${VERSION}-linux-amd64
 
 RUN wget $BINARY_URL -O beaconchain && \
     chmod +x  beaconchain
