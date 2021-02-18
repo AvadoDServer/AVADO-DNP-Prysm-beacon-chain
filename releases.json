@@ -392,10 +392,10 @@
     }
   },
   "0.0.18": {
-    "hash": "/ipfs/QmW2em8u3gmji4uBHmM8EWTyiXLosqWFP73QDuG3bC6oZe",
+    "hash": "/ipfs/QmRiRD6VhimAQS3DuboDUrFAArfnQVGrJeezrHrCHbKwd4",
     "type": "manifest",
     "uploadedTo": {
-      "http://80.208.229.228:5001": "Thu, 18 Feb 2021 08:38:11 GMT"
+      "http://80.208.229.228:5001": "Thu, 18 Feb 2021 09:41:20 GMT"
     }
   }
 }
