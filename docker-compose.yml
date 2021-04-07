@@ -1,11 +1,11 @@
 version: '3.4'
 services:
   prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:
-    image: 'prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:0.0.23'
+    image: 'prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:0.0.24'
     build:
       context: ./build
       args:
-        VERSION: v1.3.5
+        VERSION: v1.3.6
     volumes:
       - 'data:/data'
     ports:
