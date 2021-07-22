@@ -1,5 +1,7 @@
 # AVADO Prysm ETH2 beacon chain
 
+[![Build](https://github.com/AvadoDServer/AVADO-DNP-Prysm-beacon-chain/actions/workflows/build.yml/badge.svg)](https://github.com/AvadoDServer/AVADO-DNP-Prysm-beacon-chain/actions/workflows/build.yml)
+
 ## Prerequisites
  
  - A WiFi or VPN connection to your AVADO box 
