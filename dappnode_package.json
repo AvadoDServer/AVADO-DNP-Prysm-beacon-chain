@@ -1,8 +1,8 @@
 {
   "image": {
-    "path": "prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth_0.0.31.tar.xz",
-    "hash": "/ipfs/QmZyewbJK4H5zk1wtPccb9UCGzxRayDsfgBmoe7fXBYTKX",
-    "size": 56446532,
+    "path": "prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth_0.0.32.tar.xz",
+    "hash": "/ipfs/Qmbvg2LFWxBWt3B4GnGUUeLTwNyE8R5BViujDJSBpqn5AA",
+    "size": 59284556,
     "ports": [
       "12000:12000/udp",
       "13000:13000"
@@ -18,8 +18,8 @@
   "name": "prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth",
   "autoupdate": true,
   "title": "ETH2.0 Prysm beacon chain",
-  "version": "0.0.31",
-  "upstream": "v1.4.2",
+  "version": "0.0.32",
+  "upstream": "v1.4.3",
   "shortDescription": "Prysm ETH2.0 Beacon chain (Mainnet)",
   "description": "ETH2 Mainnet beacon chain",
   "type": "service",
