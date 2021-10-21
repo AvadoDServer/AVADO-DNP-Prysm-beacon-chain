@@ -9,7 +9,7 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   },
-  "host": "prysm-beacon-chain-mainnet.avadopackage.com:3500",
+  "host": "prysm-beacon-chain-mainnet.avadopackage.com:3501",
   "schemes": [
     "http"
   ],
