@@ -1,8 +1,8 @@
 {
   "image": {
     "path": "prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth_0.0.37.tar.xz",
-    "hash": "/ipfs/Qmdsmuk6nWzeegLXXbPYE13o8Nk4wtWnz3H5XcV2xEkCUQ",
-    "size": 60202532,
+    "hash": "/ipfs/QmRhbsYbRKFBQzktn8txRwTzmjVdfpE7ZoeKLB6AdMDLWv",
+    "size": 59774976,
     "ports": [
       "12000:12000/udp",
       "13000:13000"
@@ -29,5 +29,5 @@
   "links": {
     "OnboardingWizard": "http://prysm-beacon-chain-mainnet.avadopackage.com/"
   },
-  "builddate": "2021-10-20T15:40:20.834Z"
+  "builddate": "2021-10-21T09:43:07.370Z"
 }
