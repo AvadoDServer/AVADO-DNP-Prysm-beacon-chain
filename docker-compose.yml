@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:
-    image: 'prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:0.0.37'
+    image: 'prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:0.0.38'
     build:
       context: ./build
       args:
@@ -15,7 +15,7 @@ services:
     restart: always
     environment:
       - >-
-        EXTRA_OPTS=--http-web3provider=http://my.ethchain-geth.public.dappnode.eth:8545
-        --grpc-gateway-corsdomain=http://prysm-beacon-chain-mainnet.avadopackage.com,http://eth2validator.avadopackage.com
+        EXTRA_OPTS=--http-web3provider=http://ethchain-geth.my.ava.do:8545
+        --grpc-gateway-corsdomain=http://prysm-beacon-chain-mainnet.my.ava.do,http://eth2validator.my.ava.do
 volumes:
   data: {}
