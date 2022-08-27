@@ -1,11 +1,9 @@
-@charset "utf-8";
-@import url('https://fonts.googleapis.com/css?family=Baloo+Bhaijaan:400,700|Exo+2:400,700');
-
+@charset "UTF-8"
+@import url('https://fonts.googleapis.com/css?family=Baloo+Bhaijaan:400,700|Exo+2:400,700')
 
 // **********************************
 //  overwrites
 // **********************************
-
 
 // Core Variables
 $info: #413594
@@ -28,12 +26,9 @@ $switch-background: rgba(255,255,255,0.1)
 $link-col: #aaaaaa
 $link-col-hover: #eeeeee
 
-
 @import '~bulma/bulma.sass'
-@import '~bulma-switch/src/sass/index.sass'
 
-
-$dottedlinecolor: rgba(0,0,0,0.3)   
+$dottedlinecolor: rgba(0,0,0,0.3)
 
 .switch[type="checkbox"].is-rounded + label::after
     outline: 0
@@ -44,13 +39,12 @@ $dottedlinecolor: rgba(0,0,0,0.3)
 .switch[type="checkbox"]:focus + label::before
     outline: 0
 
-
 a
     color: $link-col
 
 html
-  background-color: $base-col
-  font-family: 'Baloo Bhaijaan', cursive
+    background-color: $base-col
+    font-family: 'Baloo Bhaijaan', cursive
 
 a:hover
     color: $link-col-hover
@@ -60,30 +54,27 @@ a:hover
 
 .setting
     border-top: 1px dashed $dottedlinecolor
-    box-sizing:border-box
-    padding-top: 40px   
+    box-sizing: border-box
+    padding-top: 40px
     margin: 50px 0
 
 .setting input
     margin-top: 15px
-    outline:none
+    outline: none
 
 .help
     margin-top: 10px
     font-weight: bold
 
-
 .footer .content p
     opacity: .25
-
 
 .buttons
     margin-top: 10vh
 
-
 .set_setting
     border-top: 1px dashed $dottedlinecolor
-    box-sizing:border-box
+    box-sizing: border-box
     padding-top: 2vh
     margin: 3vh 0
 
@@ -93,16 +84,28 @@ a:hover
 .switch_w_options
     margin-top: 10px
 
-
 .spacer
     height: 15px
     width: 100%
 
-
-.App .table 
+.App .table
     background-color: transparent
     color: white
 
 .App .table thead th
     color: white
-    
+
+.label
+    color: white
+
+.App  .filelist .table
+    color: #000000
+
+.filelist .input
+    color: #000000
+
+.hero-body
+    padding: .75rem
+
+.tag:not(body) .icon:first-child:last-child
+    margin-left: 0.3em

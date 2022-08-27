@@ -1,5 +1,5 @@
-FROM node:10.15.3 as build-deps-wizard
-ARG VERSION
+ARG PRYSM_VERSION
+FROM node:16.15.0 as builder
 
 # build wizard
 WORKDIR /usr/src/app/wizard
@@ -7,34 +7,38 @@ COPY wizard .
 RUN yarn
 RUN rm -Rf build && yarn run build
 
-WORKDIR /app/
-ENV DOWNLOAD_URL https://github.com/prysmaticlabs/prysm/releases/download
-ENV BINARY_URL ${DOWNLOAD_URL}/${VERSION}/beacon-chain-${VERSION}-linux-amd64
+FROM --platform=linux/amd64 gcr.io/prysmaticlabs/prysm/beacon-chain:${PRYSM_VERSION} as prysm
 
-RUN wget $BINARY_URL -O beaconchain && \
-    chmod +x  beaconchain
-RUN ls -l
-
-
-FROM debian:buster-slim
+FROM --platform=linux/amd64 debian:buster-slim
 
 RUN apt update && \
-    apt install -y ca-certificates supervisor nginx bash && \
-    rm -rf /var/lib/apt/lists/*
+    apt install -y \
+    bash \
+    ca-certificates \
+    jq \
+    nginx \
+    supervisor \
+    vim-tiny \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN useradd nginx
 
+COPY --from=prysm /app/cmd/beacon-chain/beacon-chain /bin/beaconchain
+
+VOLUME /data
+
 # copy wizard
-COPY --from=build-deps-wizard /usr/src/app/wizard/build /usr/src/monitor/wizard
-# copy BC executable
-COPY --from=build-deps-wizard /app/beaconchain /bin/beaconchain
+COPY --from=builder /usr/src/app/wizard/build /usr/local/wizard
 
-# Add config files
-COPY nginx.conf /etc/nginx/nginx.conf
+
+COPY startPrysmBeaconchain.sh /opt/prysm/
+COPY wizard/src/components/defaultsettings.json /opt/prysm
+RUN chmod a+x /opt/prysm/startPrysmBeaconchain.sh
 COPY supervisord.conf /etc/supervisord.conf
+COPY nginx.conf /etc/nginx/
 
-ADD ./entrypoint.sh /entrypoint
+USER root
+WORKDIR /
+ENTRYPOINT ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
 
-RUN chmod a+x /entrypoint
-
-ENTRYPOINT /entrypoint
