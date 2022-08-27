@@ -13,7 +13,7 @@
     "ansi_up": "^5.1.0",
     "autobahn": "^20.9.2",
     "autobahn-browser": "^20.9.2",
-    "axios": "^0.27.2",
+    "axios": "^0.21.2",
     "bulma": "^0.9.4",
     "formik": "^2.2.9",
     "react": "^16.12.0",
