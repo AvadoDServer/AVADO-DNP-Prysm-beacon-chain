@@ -75,6 +75,7 @@ const Comp = () => {
         if (dappManagerHelper)
             checkEnvs(dappManagerHelper, [
                 "--http-web3provider=http://ethchain-geth.public.dappnode.eth:8545",
+                "--http-web3provider=http://my.ethchain-geth.public.dappnode.eth:8545",
                 /--grpc-gateway-corsdomain=http:\/\/.+,http:\/\/.+/
             ], true)
 
