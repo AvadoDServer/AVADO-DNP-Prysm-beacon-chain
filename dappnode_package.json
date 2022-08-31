@@ -23,6 +23,12 @@
   "author": "AVADO",
   "license": "(c)",
   "avatar": "/ipfs/Qmf7yFka8z2QLRrDyT1ESNRwP9a1tdufEEtBghXHFUEQEP",
+  "ui": {
+    "OnboardingWizard": {
+      "url": "http://prysm-beacon-chain-mainnet.my.ava.do",
+      "external": true
+    }
+  },
   "links": {
     "OnboardingWizard": "http://prysm-beacon-chain-mainnet.my.ava.do/"
   }
