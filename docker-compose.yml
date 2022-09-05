@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:
-    image: 'prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:0.0.48'
+    image: 'prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:0.0.49'
     build:
       context: ./build
       args:
