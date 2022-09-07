@@ -137,6 +137,17 @@ const Comp = ({ settings, defaultSettings, applySettingsChanges, installedPackag
                                 </div>
                             </a>
 
+                            <div className="field">
+                                <label className="label" htmlFor="mev_boost">
+                                    <Field type="checkbox" id="mev_boost" name="mev_boost" />
+                                    Enable MEV-boost
+                                </label>
+                                {!installedPackages?.includes("mevboost.avado.dnp.dappnode.eth") && (
+                                    <a href="http://my.ava.do/#/installer">Install MEV-Boost package to enable this option</a>
+                                    // <button className="button" onClick={() => {console.log("TODO")}}>Install MEV-Boost package</button>
+                                )}
+                            </div>
+
                             {isAdminMode && (
                                 <div className="field">
                                     <label className="label" htmlFor="network">Network. Only change this if you know what you are doing</label>
