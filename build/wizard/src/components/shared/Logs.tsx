@@ -19,7 +19,7 @@ height: 30rem;
 padding: 1.25rem;
 border-radius: 0.25rem;
 background-color: #343a40;
-color: white;
+color: black;
 `;
 
 const Comp = ({ dappManagerHelper }: { dappManagerHelper: DappManagerHelper }) => {

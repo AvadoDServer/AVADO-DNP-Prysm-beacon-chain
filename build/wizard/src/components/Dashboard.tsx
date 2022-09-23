@@ -178,7 +178,7 @@ const Comp = () => {
 
     return (
 
-        <div className="dashboard has-text-white">
+        <div className="dashboard has-text-black">
             <NetworkBanner network={settings?.network ?? "mainnet"} />
 
             {!dappManagerHelper && (
@@ -189,7 +189,7 @@ const Comp = () => {
                 </section>
             )}
 
-            <section className="has-text-white">
+            <section className="has-text-black">
                 <div className="columns is-mobile">
                     <div className="column">
                         <Header restApi={restApi} logo={logo} title="Avado Prysm" tagline="Prysm beacon chain and validator" wikilink="https://wiki.ava.do/en/tutorials/prysmvalidator" />

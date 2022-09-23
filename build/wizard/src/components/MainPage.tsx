@@ -29,7 +29,7 @@ const Comp = ({ restApi, keyManagerAPI, settings, dappManagerHelper, installedPa
                         <div className="columns is-vcentered">
                             <div className="column">
                                 <div className="content">
-                                    <p className="has-text-centered">
+                                    <p className="has-text-centered has-text-black">
                                         You did not install the Prysm validator client yet.
                                         If you want to run a validator, you need to install it from the <a href="http://my.ava.do/#/installer">DappStore</a>.
                                     </p>

@@ -7,8 +7,8 @@ interface IProps {
 const ExecutionEngineBanner = ({ execution_engine, installedPackages, wikilink }: IProps) => {
 
     const isAvailable = () => {
-        console.log(installedPackages)
-        console.log(execution_engine)
+        // console.log(installedPackages)
+        // console.log(execution_engine)
         if (!installedPackages || !execution_engine) {
             return true; // not initialized yet
         }

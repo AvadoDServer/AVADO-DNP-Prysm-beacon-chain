@@ -16,13 +16,13 @@ MEV_BOOST_ENABLED=$(cat ${SETTINGSFILE} | jq -r '."mev_boost" // empty')
 
 # Get JWT Token
 JWT_SECRET="/data/jwttoken"
-JWT_TOKEN_PATH=$(cat ${SETTINGSFILE} | jq -r '."jwttokenpath"')
-until $(curl --silent --fail ${JWT_TOKEN_PATH} --output "${JWT_SECRET}"); do
-  echo "Waiting for Geth package to generate the JWT Token"
+getJwtTokenPath () {
+  echo $(cat ${SETTINGSFILE} | jq -r 'if has("jwttokenpath") then ."jwttokenpath" else "https://ethchain-geth.my.ava.do/jwttoken" end')
+}
+until $(curl --silent --fail $(getJwtTokenPath) --output "${JWT_SECRET}"); do
+  echo "Waiting for the JWT Token"
   sleep 5
 done
-
-
 
 # Start Prysm Beacon Chain
 exec /bin/beaconchain \

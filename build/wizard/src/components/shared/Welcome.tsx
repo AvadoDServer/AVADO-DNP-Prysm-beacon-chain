@@ -41,7 +41,7 @@ const Welcome = ({ logo, title, dappManagerHelper }: Props) => {
                         </figure>
                         <div className="content">
 
-                            <h1 className="title has-text-white is-2">Welcome to {title}</h1>
+                            <h1 className="title has-text-black is-2">Welcome to {title}</h1>
                             {
                                 !dappManagerHelper ? (
                                     <p>loading...</p>

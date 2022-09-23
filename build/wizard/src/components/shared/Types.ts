@@ -1,5 +1,5 @@
 
-export const supportedNetworks = ["prater", "mainnet", "kiln"]
+export const supportedNetworks = ["prater", "mainnet"]
 export type Network = typeof supportedNetworks[number]
 
 export type SettingsType = {
@@ -7,7 +7,6 @@ export type SettingsType = {
     ee_endpoint: string
     execution_engine: string
     jwttokenpath: string
-    eth1_endpoints: string[]
     validators_graffiti: string,
     p2p_peer_lower_bound: number,
     p2p_peer_upper_bound: number,
