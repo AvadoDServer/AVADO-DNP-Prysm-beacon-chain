@@ -120,7 +120,7 @@ const Comp = ({ restApi, logo, title, tagline, wikilink }: Props) => {
                     </div>
                     <div className="column">
                         <span>
-                            <h1 className="title is-1 has-text-white">{title}</h1>
+                            <h1 className="title is-1 has-text-black">{title}</h1>
                         </span>
                         <p>{tagline}</p>
                         <p><a href={wikilink}><FontAwesomeIcon className="fa-book" icon={faBook} /> {title} documentation</a></p>

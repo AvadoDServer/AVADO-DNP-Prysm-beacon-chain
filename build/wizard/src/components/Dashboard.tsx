@@ -18,7 +18,7 @@ import { useWampSession } from "./shared/useWampSession"
 import { DappManagerHelper } from "./shared/DappManagerHelper";
 import FeeRecepientBanner from "./shared/FeeRecepientBanner";
 import ExecutionEngineBanner from "./shared/ExecutionEngineBanner";
-import CheckCheckPointSync from "./CheckCheckPointSync";
+import CheckCheckPointSync from "./shared/CheckCheckPointSync";
 
 export const packageName = "prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth";
 export const validator_packageName = "eth2validator.avado.dnp.dappnode.eth";
@@ -178,7 +178,7 @@ const Comp = () => {
 
     return (
 
-        <div className="dashboard has-text-white">
+        <div className="dashboard has-text-black">
             <NetworkBanner network={settings?.network ?? "mainnet"} />
 
             {!dappManagerHelper && (
@@ -189,7 +189,7 @@ const Comp = () => {
                 </section>
             )}
 
-            <section className="has-text-white">
+            <section className="has-text-black">
                 <div className="columns is-mobile">
                     <div className="column">
                         <Header restApi={restApi} logo={logo} title="Avado Prysm" tagline="Prysm beacon chain and validator" wikilink="https://wiki.ava.do/en/tutorials/prysmvalidator" />
@@ -197,11 +197,11 @@ const Comp = () => {
                         <NavigationBar/>
 
                         <FeeRecepientBanner validators_proposer_default_fee_recipient={settings?.validators_proposer_default_fee_recipient} navigate={navigate} />
-                        <ExecutionEngineBanner execution_engine={settings?.execution_engine} wikilink="https://wiki.ava.do/en/tutorials/prysmvalidator" installedPackages={packages} />
+                        <ExecutionEngineBanner execution_engine={settings?.execution_engine} wikilink="https://wiki.ava.do/en/tutorials/prysmvalidator" installedPackages={packages} client="Prysm" />
 
                         <Routes>
                             <Route path="/" element={<MainPage settings={settings} restApi={restApi} keyManagerAPI={keyManagerAPI} dappManagerHelper={dappManagerHelper} installedPackages={packages} />} />
-                            <Route path="/checksync" element={<CheckCheckPointSync restApi={restApi} />} />
+                            <Route path="/checksync" element={<CheckCheckPointSync restApi={restApi} network={settings?.network ?? "mainnet"} packageUrl={packageUrl} />} />
                             
                             {dappManagerHelper && <Route path="/welcome" element={<Welcome logo={logo} title="Avado Prsym" dappManagerHelper={dappManagerHelper} />} />}
                             <Route path="/settings" element={<SettingsForm settings={settings} defaultSettings={defaultSettings} applySettingsChanges={applySettingsChanges} installedPackages={packages} isAdminMode={isAdminMode} />} />

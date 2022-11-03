@@ -10,27 +10,6 @@ interface Props {
 
 const Welcome = ({ logo, title, dappManagerHelper }: Props) => {
 
-    // const [executionEngines, setExecutionEngines] = React.useState<string[]>([]);
-
-    // const supportedEth1Packages = [
-    //     "ethchain-geth.public.dappnode.eth",
-    //     "avado-dnp-nethermind.public.dappnode.eth"
-    // ]
-
-    // React.useEffect(() => {
-    //     if (dappManagerHelper) {
-    //         dappManagerHelper.getPackages()
-    //             .then(packages => {
-    //                 // check if Execution engine is installed
-    //                 const eth1Nodes = supportedEth1Packages.filter(p => packages.includes(p));
-    //                 setExecutionEngines(eth1Nodes)
-    //             }
-    //             )
-
-    //     }
-    // }, [dappManagerHelper])
-
-
     return (
         <div>
             <div className="container has-text-centered ">
@@ -41,7 +20,7 @@ const Welcome = ({ logo, title, dappManagerHelper }: Props) => {
                         </figure>
                         <div className="content">
 
-                            <h1 className="title has-text-white is-2">Welcome to {title}</h1>
+                            <h1 className="title has-text-black is-2">Welcome to {title}</h1>
                             {
                                 !dappManagerHelper ? (
                                     <p>loading...</p>

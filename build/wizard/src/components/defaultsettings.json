@@ -3,14 +3,10 @@
     "ee_endpoint": "http://ethchain-geth.my.ava.do:8551",
     "execution_engine": "ethchain-geth.public.dappnode.eth",
     "jwttokenpath": "https://ethchain-geth.my.ava.do/jwttoken",
-    "eth1_endpoints": [
-        "http://ethchain-geth.my.ava.do:8545"
-    ],
     "validators_graffiti": "Avado",
     "p2p_peer_lower_bound": 64,
     "p2p_peer_upper_bound": 100,
     "validators_proposer_default_fee_recipient": "",
     "initial_state": "",
     "mev_boost": false
-
 }

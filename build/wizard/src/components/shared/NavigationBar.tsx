@@ -39,7 +39,7 @@ const NavigationBar = () => {
                 <div className="navbar-start">
                     <NavLink className={({ isActive }) => isActive ? "navbar-item is-active has-text-weight-bold" : "navbar-item"} to={`/${getQuery()}`} >Main</NavLink>
                     <NavLink className={({ isActive }) => isActive ? "navbar-item is-active has-text-weight-bold" : "navbar-item"} to={`/settings${getQuery()}`}>Settings</NavLink>
-                    {isAdminMode() && (<NavLink className={({ isActive }) => isActive ? "navbar-item is-active has-text-weight-bold" : "navbar-item"} to={`/checksync${getQuery()}`}>Check</NavLink>)}
+                    <NavLink className={({ isActive }) => isActive ? "navbar-item is-active has-text-weight-bold" : "navbar-item"} to={`/checksync${getQuery()}`}>Check</NavLink>
                 </div>
 
                 {isAdminMode() && (

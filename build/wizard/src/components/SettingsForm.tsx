@@ -43,35 +43,41 @@ const Comp = ({ settings, defaultSettings, applySettingsChanges, installedPackag
             ee_endpoint: "http://goerli-geth.my.ava.do:8551",
             jwttokenpath: "https://goerli-geth.my.ava.do/jwttoken",
             network: "prater"
-            // }, {
-            //     name: "Nethermind",
-            //     packagename: "avado-dnp-nethermind.public.dappnode.eth",
-            //     ee_endpoint: "avado-dnp-nethermind.my.ava.do:8551",
-            //     jwttokenpath: "",
-            //     network: "mainnet"
         }, {
-            name: "Geth Kiln Testnet",
-            packagename: "geth-kiln.avado.dnp.dappnode.eth",
-            ee_endpoint: "http://geth-kiln.my.ava.do:8551",
-            jwttokenpath: "https://geth-kiln.my.ava.do/jwttoken",
-            network: "kiln"
+            name: "Nethermind",
+            packagename: "avado-dnp-nethermind.public.dappnode.eth",
+            ee_endpoint: "http://avado-dnp-nethermind.my.ava.do:8551",
+            jwttokenpath: "https://avado-dnp-nethermind.my.ava.do/jwttoken",
+            network: "mainnet"
+        }, {
+            name: "Nethermind",
+            packagename: "avado-dnp-nethermind.public.dappnode.eth",
+            ee_endpoint: "http://avado-dnp-nethermind.my.ava.do:8551",
+            jwttokenpath: "https://avado-dnp-nethermind.my.ava.do/jwttoken",
+            network: "prater"
         }
     ]
 
-    const supportedExecutionEngines = (installedPackages: string[] | undefined, settings: SettingsType) => {
+    const [supportedExecutionEngines, setSpportedExecutionEngines] = React.useState<execution_engine[]>([]);
+    React.useEffect(() => {
         if (installedPackages && settings) {
-            return execution_engines.filter(ee => ee.network === settings.network && installedPackages.includes(ee.packagename))
+            if (installedPackages && settings) {
+                const sees = execution_engines.filter(ee => ee.network === settings.network)
+                if (isAdminMode)
+                    console.log("Execution clients", settings.network, sees.map(ee => ee.packagename))
+                setSpportedExecutionEngines(sees)
+            }
         }
-        return []
-    }
+    }, [installedPackages, settings])
+
+    const isInstalled = (execution_engine_name: string) => installedPackages?.includes(execution_engine_name) ?? false
 
     const applyChanges = (values: any) => {
-        console.log(values)
-        const execution_engine = execution_engines.find(ee => ee.network === values.network) ?? execution_engines[0]
+        if (isAdminMode) console.log(values)
+        const execution_engine = execution_engines.find(ee => ee.packagename === values.execution_engine) ?? execution_engines[0]
         values.ee_endpoint = execution_engine.ee_endpoint
-        values.execution_engine = execution_engine.packagename
         values.jwttokenpath = execution_engine.jwttokenpath
-        console.log(values)
+        if (isAdminMode) console.log(values)
         applySettingsChanges(values)
     }
 
@@ -94,7 +100,7 @@ const Comp = ({ settings, defaultSettings, applySettingsChanges, installedPackag
     }
 
     return <>
-        <h2 className="title is-2 has-text-white">Settings</h2>
+        <h2 className="title is-2">Settings</h2>
         {
             !settings && (
                 <p>Loading settings...</p>
@@ -121,10 +127,29 @@ const Comp = ({ settings, defaultSettings, applySettingsChanges, installedPackag
                                 </div>
                             </div>
 
+                            {supportedExecutionEngines && (
+                                <div className="field">
+                                    <label className="label" htmlFor="execution_engine">Execution Engine</label>
+                                    <div className="control">
+                                        {supportedExecutionEngines.map(ee =>
+                                            <label className="radio" key={ee.packagename}>
+                                                <Field type="radio" name="execution_engine" value={ee.packagename} disabled={!isInstalled(ee.packagename)} />
+                                                {ee.name}
+                                            </label>
+                                        )}
+                                        {!isInstalled(values.execution_engine) && (
+                                            <p className="help is-danger">The selected execution engine is not installed.</p>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
                             {/* eslint-disable-next-line */}
                             <a id="validators_proposer_default_fee_recipient">
                                 <div className="field">
-                                    <label className="label" htmlFor="validators_proposer_default_fee_recipient">Default transaction fee recipient for the validators (after the Merge). The fee recipient can be overriden per validator in the validator UI.</label>
+                                    <label className="label" htmlFor="validators_proposer_default_fee_recipient">Default transaction fee recipient for the validators.
+                                    The fee recipient can be overriden per validator by clicking the fee recipient value of any validator on the main page.
+                                    </label>
                                     <div className="control">
                                         <Field className={"input" + (errors?.validators_proposer_default_fee_recipient ? " is-danger" : "")}
                                             id="validators_proposer_default_fee_recipient"
@@ -137,14 +162,15 @@ const Comp = ({ settings, defaultSettings, applySettingsChanges, installedPackag
                                 </div>
                             </a>
 
+
+
                             <div className="field">
-                                <label className="label" htmlFor="mev_boost">
-                                    <Field type="checkbox" id="mev_boost" name="mev_boost" />
+                                <label className="label" htmlFor="mev_boost" >
+                                    <Field type="checkbox" id="mev_boost" name="mev_boost" disabled={!installedPackages?.includes("mevboost.avado.dnp.dappnode.eth")}/>
                                     Enable MEV-boost
                                 </label>
                                 {!installedPackages?.includes("mevboost.avado.dnp.dappnode.eth") && (
                                     <a href="http://my.ava.do/#/installer">Install MEV-Boost package to enable this option</a>
-                                    // <button className="button" onClick={() => {console.log("TODO")}}>Install MEV-Boost package</button>
                                 )}
                             </div>
 
@@ -162,15 +188,6 @@ const Comp = ({ settings, defaultSettings, applySettingsChanges, installedPackag
                                 </div>
                             )}
 
-                            {/* <div>
-                                <div className="container">
-                                    <pre className="transcript">
-                                        Errors : {JSON.stringify(errors)}<br />
-                                        Touched : {JSON.stringify(touched)}
-                                    </pre>
-                                </div>
-                            </div> */}
-
                             <div className="field is-grouped">
                                 <div className="control">
                                     <button disabled={!(isValid && dirty)} className="button" onClick={() => applyChanges(values)}>Apply changes</button>
@@ -182,6 +199,23 @@ const Comp = ({ settings, defaultSettings, applySettingsChanges, installedPackag
                                     <div className="button is-danger" onClick={() => confirmResetDefaults()}>Reset defaults</div>
                                 </div>
                             </div>
+
+                            {isAdminMode && (
+                                <div>
+                                    <hr />
+
+
+                                    <div>
+                                        <div className="container">
+                                            <pre className="transcript">
+                                                Errors : {JSON.stringify(errors)}<br />
+                                                Touched : {JSON.stringify(touched)}<br />
+                                                Values : {JSON.stringify(values)}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </Form>
                     }}
                 </Formik>

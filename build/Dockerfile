@@ -7,6 +7,12 @@ COPY wizard .
 RUN yarn
 RUN rm -Rf build && yarn run build
 
+
+# build monitor
+WORKDIR /usr/src/monitor
+COPY monitor .
+RUN yarn
+
 FROM --platform=linux/amd64 gcr.io/prysmaticlabs/prysm/beacon-chain:${PRYSM_VERSION} as prysm
 
 FROM --platform=linux/amd64 debian:buster-slim
@@ -17,6 +23,7 @@ RUN apt update && \
     ca-certificates \
     jq \
     nginx \
+    nodejs \
     supervisor \
     vim-tiny \
     curl \
@@ -30,7 +37,7 @@ VOLUME /data
 
 # copy wizard
 COPY --from=builder /usr/src/app/wizard/build /usr/local/wizard
-
+COPY --from=builder /usr/src/monitor /usr/local/monitor
 
 COPY startPrysmBeaconchain.sh /opt/prysm/
 COPY wizard/src/components/defaultsettings.json /opt/prysm

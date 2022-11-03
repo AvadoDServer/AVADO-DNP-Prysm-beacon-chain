@@ -9,7 +9,6 @@ import OverrideVallidatorFeeRecipientModal from "./OverrideVallidatorFeeRecipien
 import { RestApi } from "./RestApi";
 import { useNavigate } from "react-router-dom";
 import thereIsNothingHereYet from "../../assets/there-is-nothing-here-yet.jpeg";
-import ImportValidatorsFromRocketPool from "./ImportValidatorsFromRocketPool";
 import { DappManagerHelper } from "./DappManagerHelper";
 
 interface Props {
@@ -46,8 +45,7 @@ export const abbreviatePublicKey = (key: string) => <abbr title={key}>{key.subst
 export const createBeaconchainUrl = (network: Network | null | undefined, validatorPubkey: string, text?: any) => {
     const beaconChainBaseUrl = ({
         "prater": "https://prater.beaconcha.in",
-        "mainnet": "https://beaconcha.in",
-        "kiln": "https://beaconchain.kiln.themerge.dev/"
+        "mainnet": "https://beaconcha.in"
     })[network ?? "mainnet"]
     return <a href={beaconChainBaseUrl + validatorPubkey}>{text ? text : validatorPubkey}</a>;
 }
@@ -220,9 +218,9 @@ const Validators = ({ settings, restAPI, keyManagerAPI, dappManagerHelper, reado
                                     <p>Click the "Add validator" widget to import your validator keys.</p>
                                     <div className="columns is-centered">
                                         <div className="column is-half">
-                                            <figure className="image is-4by3">
+                                            {/* <figure className="image is-4by3">
                                                 <img src={thereIsNothingHereYet} alt={"awkward-seal-there-is-nothing-here-yet-meme"} />
-                                            </figure>
+                                            </figure> */}
                                         </div>
                                     </div>
                                 </div>
@@ -281,7 +279,6 @@ const Validators = ({ settings, restAPI, keyManagerAPI, dappManagerHelper, reado
                             </>
                         )}
                         {validators && !readonly && (<AddValidator updateValidators={updateValidators} keyManagerAPI={keyManagerAPI} />)}
-                        {false && keyManagerAPI && (<ImportValidatorsFromRocketPool keyManagerAPI={keyManagerAPI} dappManagerHelper={dappManagerHelper} network={settings?.network} updateValidators={updateValidators} />)}
                     </div>
                 </div>
             </div>
