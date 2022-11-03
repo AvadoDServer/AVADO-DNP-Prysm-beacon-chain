@@ -1,0 +1,21 @@
+{
+  "name": "monitor",
+  "version": "1.0.0",
+  "description": "Server side monitor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "heeckhau",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@types/restify": "^8.5.5",
+    "axios": "^0.24.0",
+    "restify": "^8.6.0",
+    "restify-cors-middleware2": "^2.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.23",
+    "typescript": "^4.8.4"
+  }
+}

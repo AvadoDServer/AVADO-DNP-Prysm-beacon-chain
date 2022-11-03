@@ -17,7 +17,7 @@ const FeeRecepientBanner = ({ validators_proposer_default_fee_recipient, navigat
                     <div className="hero-body is-small">
                          {/* eslint-disable-next-line */}
                         <a className="link" >
-                            <p className="has-text-centered">You did not configure a default <em>validator proposal fee recepient yet</em>. Make sure to configure this setting before <em>The Merge</em>
+                            <p className="has-text-centered">You did not configure a default <em>validator proposal fee recepient yet</em>. Make sure to configure this or you will miss out on rewards.
                             </p>
                         </a>
                     </div>
