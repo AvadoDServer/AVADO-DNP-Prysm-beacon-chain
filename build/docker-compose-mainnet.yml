@@ -1,0 +1,18 @@
+version: '3.4'
+services:
+  prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:
+    image: 'prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:0.0.53'
+    build:
+      context: ./build
+      args:
+        PRYSM_VERSION: v3.1.2
+    volumes:
+      - 'data:/data'
+    ports:
+      - '12000:12000/udp'
+      - '13000:13000'
+    restart: always
+    environment:
+      - EXTRA_OPTS=
+volumes:
+  data: {}
