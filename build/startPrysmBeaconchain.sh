@@ -15,10 +15,7 @@ MEV_BOOST_ENABLED=$(cat ${SETTINGSFILE} | jq -r '."mev_boost" // empty')
 
 # Get JWT Token
 JWT_SECRET="/data/jwttoken"
-getJwtTokenPath () {
-  echo $(cat ${SETTINGSFILE} | jq -r 'if has("jwttokenpath") then ."jwttokenpath" else "https://ethchain-geth.my.ava.do/jwttoken" end')
-}
-until $(curl --silent --fail $(getJwtTokenPath) --output "${JWT_SECRET}"); do
+until $(curl --silent --fail "http://dappmanager.my.ava.do/jwttoken.txt" --output "${JWT_SECRET}"); do
   echo "Waiting for the JWT Token"
   sleep 5
 done
