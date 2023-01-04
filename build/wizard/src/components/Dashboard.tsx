@@ -19,10 +19,8 @@ import { DappManagerHelper } from "./shared/DappManagerHelper";
 import FeeRecepientBanner from "./shared/FeeRecepientBanner";
 import ExecutionEngineBanner from "./shared/ExecutionEngineBanner";
 import CheckCheckPointSync from "./shared/CheckCheckPointSync";
+import { packageName, validator_packageName, keyManagerAPIUrl, packageUrl } from "./urls"
 
-export const packageName = "prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth";
-export const validator_packageName = "eth2validator.avado.dnp.dappnode.eth";
-export const packageUrl = "prysm-beacon-chain-mainnet.my.ava.do";
 
 const Comp = () => {
     const wampSession = useWampSession();
@@ -36,8 +34,6 @@ const Comp = () => {
     const [restApi, setRestApi] = React.useState<RestApi | null>();
     const [keyManagerAPI, setKeyManagerAPI] = React.useState<RestApi>();
 
-    const restApiUrl = `http://${packageUrl}:3500`
-    const keyManagerAPIUrl = "http://eth2validator.my.ava.do:7500"
 
     const settingsPathInContainer = "/data/"
     const settingsFileName = "settings.json"
@@ -159,6 +155,7 @@ const Comp = () => {
             return;
         }
         if (!restApi) {
+            const restApiUrl = `http://${packageUrl}:3500`
             setRestApi(new RestApi(restApiUrl))
         }
 

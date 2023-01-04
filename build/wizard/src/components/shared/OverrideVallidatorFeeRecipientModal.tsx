@@ -24,7 +24,8 @@ const OverrideVallidatorFeeRecipientModal = ({ network, keyManagerAPI, validator
     const beaconchainUrl = (validatorPubkey: string, text: any) => {
         const beaconChainBaseUrl = ({
             "prater": "https://prater.beaconcha.in",
-            "mainnet": "https://beaconcha.in"
+            "mainnet": "https://beaconcha.in",
+            "gnosis": "https://beacon.gnosischain.com"
         })[network]
         return <a href={beaconChainBaseUrl + validatorPubkey}>{text ? text : validatorPubkey}</a>;
     }

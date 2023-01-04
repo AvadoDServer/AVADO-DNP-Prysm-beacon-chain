@@ -2,6 +2,7 @@ import Validators from "./shared/Validators";
 import { SettingsType } from "./shared/Types";
 import { RestApi } from "./shared/RestApi";
 import { DappManagerHelper } from "./shared/DappManagerHelper";
+import {keyManagerAPIUrl} from "./urls"
 
 interface Props {
     restApi: RestApi | undefined | null
@@ -58,7 +59,7 @@ const Comp = ({ restApi, keyManagerAPI, settings, dappManagerHelper, installedPa
                                         <div className="content">
                                             <p className="has-text-centered">
                                                 <a className="button is-medium is-link" target="_blank"
-                                                    href={`http://eth2validator.my.ava.do:7500/initialize?token=${keyManagerAPI?.apiKey}`}>Open Validator UI</a>
+                                                    href={`${keyManagerAPIUrl}/initialize?token=${keyManagerAPI?.apiKey}`}>Open Validator UI</a>
                                             </p>
                                         </div>
                                     </div>
