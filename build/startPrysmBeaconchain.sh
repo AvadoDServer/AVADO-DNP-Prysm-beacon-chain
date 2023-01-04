@@ -24,8 +24,8 @@ case ${NETWORK} in
   "prater")
     P2P_TCP_PORT=13007
     P2P_UDP_PORT=12007
-    CHECKPOINT_SYNC_URL=https://goerli.checkpoint-sync.ethdevops.io
-    GENESIS_BEACON_API_URL=https://goerli.checkpoint-sync.ethdevops.io
+    CHECKPOINT_SYNC_URL=https://checkpoint-sync.goerli.ethpandaops.io
+    GENESIS_BEACON_API_URL=https://checkpoint-sync.goerli.ethpandaops.io
     ;;
   *)
     P2P_TCP_PORT=13000
