@@ -61,6 +61,12 @@ const Comp = ({ settings, defaultSettings, applySettingsChanges, installedPackag
             ee_endpoint: "http://nethermind-gnosis.my.ava.do:8551",
             jwttokenpath: "https://nethermind-gnosis.my.ava.do/jwttoken",
             network: "gnosis"
+        }, {
+            name: "Erigon Goerli Testnet",
+            packagename: "erigon.avado.dappnode.eth",
+            ee_endpoint: "http://erigon.my.ava.do:8551",
+            jwttokenpath: "https://erigon.my.ava.do/jwttoken",
+            network: "prater"
         }
     ]
 
