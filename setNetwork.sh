@@ -13,9 +13,10 @@ esac
 
 for file in \
     build/docker-compose.yml \
+    build/avatar.png \
     dappnode_package.json \
-    ./build/wizard/src/components/defaultsettings.json \
-    ./build/wizard/src/components/urls.ts
+    build/wizard/src/components/defaultsettings.json \
+    build/wizard/src/components/urls.ts
 do
     BASENAME=${file%.*}
     EXT=${file##*.}
