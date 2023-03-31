@@ -1,8 +1,8 @@
 {
   "image": {
     "ports": [
-      "12007:12007/udp",
-      "13007:13007"
+      "12000:12000/udp",
+      "13000:13000"
     ],
     "environment": [
       "EXTRA_OPTS="
@@ -12,24 +12,24 @@
     ],
     "restart": "always"
   },
-  "name": "prysm-beacon-chain-prater.avado.dnp.dappnode.eth",
+  "name": "prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth",
   "autoupdate": true,
-  "title": "ETH2.0 Prysm beacon chain: Prater testnet",
-  "version": "0.0.26",
+  "title": "ETH2.0 Prysm beacon chain: Mainnet",
+  "version": "0.0.56",
   "upstream": "v4.0.1",
-  "shortDescription": "Prysm ETH2.0 Beacon chain (Prater)",
-  "description": "ETH2 Prater beacon chain",
+  "shortDescription": "Prysm ETH2.0 Beacon chain (Mainnet)",
+  "description": "ETH2 Mainnet beacon chain",
   "type": "service",
   "author": "AVADO",
   "license": "(c)",
   "avatar": "/ipfs/Qmf7yFka8z2QLRrDyT1ESNRwP9a1tdufEEtBghXHFUEQEP",
   "ui": {
     "OnboardingWizard": {
-      "url": "http://prysm-beacon-chain-prater.my.ava.do",
+      "url": "http://prysm-beacon-chain-mainnet.my.ava.do",
       "external": true
     }
   },
   "links": {
-    "OnboardingWizard": "http://prysm-beacon-chain-prater.my.ava.do/"
+    "OnboardingWizard": "http://prysm-beacon-chain-mainnet.my.ava.do/"
   }
 }
