@@ -137,11 +137,11 @@ const Comp = () => {
             fetchApiToken(dappManagerHelper, settings)
         }
 
-        dappManagerHelper.getFileContentFromContainer(`/usr/share/nginx/wizard/auth-token.txt`, validator_packageName).then(
+        dappManagerHelper.getFileContentFromContainer(`/root/.eth2validators/auth-token`, validator_packageName).then(
             (apiToken) => {
                 console.log(apiToken)
                 if (apiToken) {
-                    setKeyManagerAPI(new RestApi(keyManagerAPIUrl, apiToken))
+                    setKeyManagerAPI(new RestApi(keyManagerAPIUrl, apiToken.split("\n")[1]))
                 } else {
                     reschedule()
                 }

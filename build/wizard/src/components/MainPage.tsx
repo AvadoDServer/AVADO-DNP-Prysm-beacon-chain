@@ -48,7 +48,6 @@ const Comp = ({ restApi, keyManagerAPI, settings, dappManagerHelper, installedPa
                             restAPI={restApi}
                             keyManagerAPI={keyManagerAPI}
                             dappManagerHelper={dappManagerHelper}
-                            readonly={true}
                         />)
                         : <p>Loading...</p>}
                     {keyManagerAPI && (
