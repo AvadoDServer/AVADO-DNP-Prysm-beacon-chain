@@ -1,12 +1,16 @@
 import React from "react";
 import { NavLink, useLocation, useSearchParams } from "react-router-dom";
+import { Network } from "./Types";
 
-const NavigationBar = () => {
+interface Props {
+    network: Network
+}
+
+const NavigationBar = ({ network }: Props) => {
 
     const [navBarIsActive, setNavBarIsActive] = React.useState(false);
     const { pathname } = useLocation();
     const [searchParams] = useSearchParams()
-
 
     const isAdminMode = (): boolean => {
         return pathname === "/admin" || searchParams.get("admin") !== null
@@ -39,7 +43,9 @@ const NavigationBar = () => {
                 <div className="navbar-start">
                     <NavLink className={({ isActive }) => isActive ? "navbar-item is-active has-text-weight-bold" : "navbar-item"} to={`/${getQuery()}`} >Main</NavLink>
                     <NavLink className={({ isActive }) => isActive ? "navbar-item is-active has-text-weight-bold" : "navbar-item"} to={`/settings${getQuery()}`}>Settings</NavLink>
-                    <NavLink className={({ isActive }) => isActive ? "navbar-item is-active has-text-weight-bold" : "navbar-item"} to={`/checksync${getQuery()}`}>Check</NavLink>
+                    {network !== "gnosis" && (
+                        <NavLink className={({ isActive }) => isActive ? "navbar-item is-active has-text-weight-bold" : "navbar-item"} to={`/checksync${getQuery()}`}>Check</NavLink>
+                    )}
                 </div>
 
                 {isAdminMode() && (

@@ -5,7 +5,7 @@ import { RestApi } from "./RestApi";
 
 interface Props {
     updateValidators: () => void
-    keyManagerAPI: RestApi
+    api: RestApi
 }
 
 type result = {
@@ -15,7 +15,7 @@ type result = {
 
 type PassWordFieldType = "text" | "password"
 
-const AddValidator = ({ updateValidators, keyManagerAPI }: Props) => {
+const AddValidator = ({ updateValidators, api }: Props) => {
     const [keyStoreFile, setKeyStoreFile] = React.useState<File | null>();
     const [password, setPassword] = React.useState<string>("");
     const [passwordFieldType, setPasswordFieldType] = React.useState<PassWordFieldType>("password");
@@ -46,7 +46,7 @@ const AddValidator = ({ updateValidators, keyManagerAPI }: Props) => {
         const message = await createMessage();
         console.log(message)
 
-        keyManagerAPI.post("/eth/v1/keystores", message, (res) => {
+        api.post("/keymanager/eth/v1/keystores", message, (res) => {
             //https://ethereum.github.io/keymanager-APIs/#/Local%20Key%20Manager/ImportKeystores
             const status = res.data.data[0].status
 

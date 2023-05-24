@@ -28,17 +28,19 @@ export class SupervisorCtl {
         this.client = xmlrpc.createClient({ host: host, port: port, path: path })
     }
 
-    callMethod(method: Method, params: any[]) {
-        this.client.methodCall(method, params, (error: any, value) => {
-            if (error) {
-                console.log('supervisorCtl error:', error, `(${this.host},${this.port},${this.path})`);
-                console.log('req headers:', error.req && error.req._header);
-                console.log('res code:', error.res && error.res.statusCode);
-                console.log('res body:', error.body);
-            } else {
-                return value;
-            }
-        })
-
+    callMethod(method: Method, params: any[]): any {
+        return new Promise((resolve, reject) => {
+            this.client.methodCall(method, params, (error: any, value:any) => {
+                if (error) {
+                    console.log('supervisorCtl error:', error, `(${this.host},${this.port},${this.path})`);
+                    console.log('req headers:', error.req && error.req._header);
+                    console.log('res code:', error.res && error.res.statusCode);
+                    console.log('res body:', error.body);
+                    return reject(error)
+                } else {
+                    resolve(value)
+                }
+            })
+          })
     }
 }

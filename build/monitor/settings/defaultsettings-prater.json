@@ -1,12 +1,11 @@
 {
     "network": "prater",
     "ee_endpoint": "http://goerli-geth.my.ava.do:8551",
-    "execution_engine": "goerli-geth.public.dappnode.eth",
-    "jwttokenpath": "https://goerli-geth.my.ava.do/jwttoken",
+    "execution_engine": "goerli-geth.avado.dnp.dappnode.eth",
     "validators_graffiti": "Avado",
     "p2p_peer_lower_bound": 64,
     "p2p_peer_upper_bound": 100,
     "validators_proposer_default_fee_recipient": "",
-    "initial_state": "",
+    "initial_state": "https://goerli.checkpoint-sync.ethpandaops.io/eth/v2/debug/beacon/states/finalized",
     "mev_boost": false
 }
