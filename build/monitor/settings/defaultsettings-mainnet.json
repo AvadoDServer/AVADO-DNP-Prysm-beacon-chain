@@ -6,6 +6,6 @@
     "p2p_peer_lower_bound": 64,
     "p2p_peer_upper_bound": 100,
     "validators_proposer_default_fee_recipient": "",
-    "initial_state": "https://snapshots.ava.do/state.ssz",
+    "initial_state": "https://sync-mainnet.beaconcha.in",
     "mev_boost": false
 }

@@ -32,6 +32,8 @@ const ExitValidatorModal = ({ validator, api, updateValidators, network }: Props
             alert(res.data);
         }, (e) => {
             console.log(e)
+            alert("Exit request sent.");
+            triggerValidatorUpdates()
         });
     }
 

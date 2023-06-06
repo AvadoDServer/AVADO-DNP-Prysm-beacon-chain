@@ -7,7 +7,7 @@ import { Network, SettingsType } from "./shared/Types";
 import server_config from "../server_config.json"
 
 interface Props {
-    name : string
+    name: string
     settings: SettingsType | undefined,
     defaultSettings: SettingsType | undefined,
     applySettingsChanges: (settings: any) => void
@@ -32,7 +32,7 @@ const Comp = ({ name, settings, defaultSettings, applySettingsChanges, installed
         network: Network
     }
 
-    const execution_engines: execution_engine[] = useMemo( () => [
+    const execution_engines: execution_engine[] = useMemo(() => [
         {
             name: "Geth Mainnet",
             packagename: "ethchain-geth.public.dappnode.eth",
@@ -131,7 +131,7 @@ const Comp = ({ name, settings, defaultSettings, applySettingsChanges, installed
                                 </div>
                             </div>
 
-                            <div className="field">
+                            {/* <div className="field">
                                 <label className="label" htmlFor="p2p_peer_upper_bound">Upper bound on the target number of peers. {name} will refuse new peer requests that would cause the number of peers to exceed this value. The default is {defaultSettings?.p2p_peer_upper_bound}</label>
                                 <div className="control">
                                     <Field className={"input" + (errors?.p2p_peer_upper_bound ? " is-danger" : "")} id="p2p_peer_upper_bound" name="p2p_peer_upper_bound" />
@@ -139,7 +139,7 @@ const Comp = ({ name, settings, defaultSettings, applySettingsChanges, installed
                                         <p className="help is-danger">{errors.p2p_peer_upper_bound.toString()}</p>
                                     ) : null}
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="field">
                                 <label className="label" htmlFor="initial_state">Initial State: Start {name} from a recent finalized checkpoint state rather than syncing from genesis. URL to an SSZ-encoded state. The default uses a checkpoint cached on an Avado server</label>

@@ -30,31 +30,40 @@ const settings_file_path = '/data/settings.json';
 
 server.get("/ping", (req: restify.Request, res: restify.Response, next: restify.Next) => {
     res.send(200, "pong");
-    next()
+    return next()
 });
 
 server.get("/network", (req: restify.Request, res: restify.Response, next: restify.Next) => {
     res.send(200, server_config.network);
-    next()
+    return next()
 });
 
 server.get("/name", (req: restify.Request, res: restify.Response, next: restify.Next) => {
     res.send(200, server_config.name);
-    next()
+    return next()
 });
 
 server.get("/settings", (req: restify.Request, res: restify.Response, next: restify.Next) => {
     try {
         const settings = JSON.parse(fs.readFileSync(settings_file_path, 'utf8'))
         res.send(200, settings ? JSON.stringify(settings) : defaultsettings);
-        next()
+        return next()
     } catch (err) {
         res.send(200, defaultsettings);
-        next();
+        return next();
     }
 });
 
 server.post("/settings", (req: restify.Request, res: restify.Response, next: restify.Next) => {
+    // push settings to vc client
+    console.log("Pushing settings to validator", req.body)
+    try {
+        axios.post(`${server_config.keymanager_url}/settings`, req.body)
+    } catch (err) {
+        console.log("Error pushing new settings to validator client", err)
+    }
+
+    // set settings
     const settings = JSON.stringify(req.body, null, 4);
     fs.writeFileSync(settings_file_path, settings, 'utf8');
     restart().then((result) => {
@@ -66,10 +75,10 @@ server.post("/settings", (req: restify.Request, res: restify.Response, next: res
 server.get("/defaultsettings", (req: restify.Request, res: restify.Response, next: restify.Next) => {
     try {
         res.send(200, defaultsettings);
-        next()
+        return next()
     } catch (err) {
         res.send(500, "failed")
-        next();
+        return next();
     }
 });
 
@@ -77,7 +86,8 @@ const supervisorCtl = new SupervisorCtl(`localhost`, 5555, '/RPC2')
 
 const restart = async () => {
     await Promise.all([
-        supervisorCtl.callMethod('supervisor.stopProcess', [server_config.name, true]),
+        axios.post(`${server_config.keymanager_url}/service/restart`),
+        supervisorCtl.callMethod('supervisor.stopProcess', [server_config.name, true])
     ])
     return Promise.all([
         supervisorCtl.callMethod('supervisor.startProcess', [server_config.name, true]),
@@ -100,10 +110,10 @@ server.post("/service/stop", (req: restify.Request, res: restify.Response, next:
         supervisorCtl.callMethod(method, [server_config.name]),
     ]).then(result => {
         res.send(200, "stopped");
-        next()
+        return next()
     }).catch(err => {
         res.send(200, "failed")
-        next();
+        return next();
     })
 });
 
@@ -113,10 +123,10 @@ server.post("/service/start", (req: restify.Request, res: restify.Response, next
         supervisorCtl.callMethod(method, [server_config.name]),
     ]).then(result => {
         res.send(200, "started");
-        next()
+        return next()
     }).catch(err => {
         res.send(200, "failed")
-        next();
+        return next();
     })
 });
 
@@ -125,10 +135,10 @@ server.get("/service/status", (req: restify.Request, res: restify.Response, next
     supervisorCtl.callMethod(method, [])
         .then((value: any) => {
             res.send(200, value);
-            next()
+            return next()
         }).catch((_error: any) => {
             res.send(500, "failed")
-            next();
+            return next();
         });
 });
 
@@ -187,13 +197,13 @@ const get = (url: string, res: restify.Response, next: restify.Next) => {
         (response: any) => {
             // console.dir(response.data.data)
             res.send(response.status, response.data.data)
-            next();
+            return next();
         }
     ).catch(
         (error: any) => {
             console.log("Error contacting ", url, error);
             res.send(500, "failed")
-            next();
+            return next();
         }
     )
 }
@@ -259,11 +269,10 @@ const axiosRequest = (url: string, headers: object, req: restify.Request, res: r
         headers: headers,
     }).then((response: any) => {
         res.send(response.status, response.data)
-        next();
+        return next();
     }).catch((error: any) => {
-        console.log("Error", url, error.cause);
-        res.send(500, error.cause)
-        next();
+        console.log("Error", url, error.message);
+        return next();
     });
 }
 

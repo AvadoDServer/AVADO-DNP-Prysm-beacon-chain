@@ -53,7 +53,7 @@ const Validators = ({ settings, api, readonly = false }: Props) => {
     const [validatorData, setValidatorData] = React.useState<ValidatorData[]>();
     const [validators, setValidators] = React.useState<string[]>();
 
-    type feeRecipientType = {pubKey: string, recipient: string}
+    type feeRecipientType = { pubKey: string, recipient: string }
     const [feeRecipients, setFeeRecipients] = React.useState<feeRecipientType[]>();
 
     const [configuringfeeRecipient, setConfiguringfeeRecipient] = React.useState<ConfiguringfeeRecipient | null>();
@@ -85,7 +85,7 @@ const Validators = ({ settings, api, readonly = false }: Props) => {
 
     React.useEffect(() => {
         const getFeeRecipient = async (pubKey: string) => {
-            const result = (recipient: string) => ({pubKey: pubKey, recipient: recipient})
+            const result = (recipient: string) => ({ pubKey: pubKey, recipient: recipient })
 
             if (!settings?.validators_proposer_default_fee_recipient) {
                 return result("Configure default setting first!")
@@ -254,7 +254,7 @@ const Validators = ({ settings, api, readonly = false }: Props) => {
 
     const canExit = (validator: ValidatorData) => validator.status === "active_ongoing"
 
-    const getFeeRecipient = (feeRecipients: feeRecipientType[], pubkey: string) => feeRecipients.find(x => (x.pubKey === pubkey))!.recipient
+    const getFeeRecipient = (feeRecipients: feeRecipientType[], pubkey: string) => feeRecipients.find(x => (x.pubKey === pubkey))?.recipient ?? "0x"
 
     return (
         <div>
