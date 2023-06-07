@@ -7,31 +7,12 @@ export class DappManagerHelper {
         this.wampSession = wampSession;
     }
 
-    dataUriToBlob(dataURI: string) {
+    async dataUriToBlob(dataURI: string) {
         if (!dataURI || typeof dataURI !== "string")
             throw Error("dataUri must be a string");
 
-        // Credit: https://stackoverflow.com/questions/12168909/blob-from-dataurl
-        // convert base64 to raw binary data held in a string
-        // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-        const byteString = atob(dataURI.split(",")[1]);
-        // separate out the mime component
-        // dataURI = data:application/zip;base64,UEsDBBQAAAg...
-        const mimeString = dataURI
-            .split(",")[0]
-            .split(":")[1]
-            .split(";")[0];
-        // write the bytes of the string to an ArrayBuffer
-        const ab = new ArrayBuffer(byteString.length);
-        // create a view into the buffer
-        const ia = new Uint8Array(ab);
-        // set the bytes of the buffer to the correct values
-        for (let i = 0; i < byteString.length; i++) {
-            ia[i] = byteString.charCodeAt(i);
-        }
-        // write the ArrayBuffer to a blob, and you're done
-        const blob = new Blob([ab], { type: mimeString });
-        return blob;
+        // note fetch requires NodeJS 18
+        return await (await fetch(dataURI)).blob();
     }
 
     public getFileContentFromContainer(pathInContainer: string, packageName?: string) {
@@ -46,7 +27,7 @@ export class DappManagerHelper {
             if (res.success !== true) return;
             const dataUri = res.result;
             if (!dataUri) return;
-            const data = await this.dataUriToBlob(dataUri).text();
+            const data = await (await this.dataUriToBlob(dataUri)).text();
 
             return data
         }
@@ -83,7 +64,9 @@ export class DappManagerHelper {
             if (res.success !== true) return [];
 
             // console.dir(res)
-            const packageNames = res.result.map((r: any) => r.name) as string[];
+            const packageNames = res.result
+                .filter((r: any) => r.running) // only running packages
+                .map((r: any) => r.name) as string[];
 
             return packageNames;
         }

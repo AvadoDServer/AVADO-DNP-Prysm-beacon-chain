@@ -5,7 +5,7 @@ import { RestApi } from "./RestApi"
 
 interface Props {
     network: Network
-    keyManagerAPI: RestApi | undefined
+    api: RestApi
     validators_proposer_default_fee_recipient: string | undefined
     updateValidators: () => void
     configuringfeeRecipient: ConfiguringfeeRecipient | undefined | null
@@ -17,7 +17,7 @@ interface ConfiguringfeeRecipient {
     feerecipient: string
 }
 
-const OverrideVallidatorFeeRecipientModal = ({ network, keyManagerAPI, validators_proposer_default_fee_recipient, updateValidators, configuringfeeRecipient, setConfiguringfeeRecipient }: Props) => {
+const OverrideVallidatorFeeRecipientModal = ({ network, api, validators_proposer_default_fee_recipient, updateValidators, configuringfeeRecipient, setConfiguringfeeRecipient }: Props) => {
     const [feeRecipientFieldValue, setFeeRecipientFieldValue] = React.useState<string>("");
     const [feeRecipientFieldValueError, setFeeRecipientFieldValueError] = React.useState<string | null>(null);
 
@@ -39,10 +39,10 @@ const OverrideVallidatorFeeRecipientModal = ({ network, keyManagerAPI, validator
     }, [configuringfeeRecipient])
 
     const saveFeeRecipient = async (pubKey: string, feeRecipientAddress: string) => {
-        if (!keyManagerAPI)
+        if (!api)
             return;
         if (feeRecipientAddress) {
-            keyManagerAPI.post(`/eth/v1/validator/${pubKey}/feerecipient`, {
+            api.post(`/keymanager/eth/v1/validator/${pubKey}/feerecipient`, {
                 "ethaddress": feeRecipientAddress
             }, (res) => {
                 console.log(res)
@@ -61,7 +61,7 @@ const OverrideVallidatorFeeRecipientModal = ({ network, keyManagerAPI, validator
             });
 
         } else {
-            keyManagerAPI.delete(`/eth/v1/validator/${pubKey}/feerecipient`, {},
+            api.delete(`/keymanager/eth/v1/validator/${pubKey}/feerecipient`, {},
                 (res) => {
                     if (res.status !== 204) {
                         setFeeRecipientFieldValueError(res.data.message)

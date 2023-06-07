@@ -1,14 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { DappManagerHelper } from "./DappManagerHelper";
+import { logo } from "../Logo"
 
 interface Props {
-    logo: string
     title: string
     dappManagerHelper: DappManagerHelper
 }
 
-const Welcome = ({ logo, title, dappManagerHelper }: Props) => {
+const Welcome = ({ title, dappManagerHelper }: Props) => {
 
     return (
         <div>

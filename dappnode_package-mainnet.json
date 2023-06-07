@@ -16,7 +16,7 @@
   "autoupdate": true,
   "title": "ETH2.0 Prysm beacon chain: Mainnet",
   "version": "0.0.59",
-  "upstream": "v4.0.4",
+  "upstream": "v4.0.5",
   "shortDescription": "Prysm ETH2.0 Beacon chain (Mainnet)",
   "description": "ETH2 Mainnet beacon chain",
   "type": "service",

@@ -1,0 +1,11 @@
+{
+    "network": "prater",
+    "ee_endpoint": "http://goerli-geth.my.ava.do:8551",
+    "execution_engine": "goerli-geth.avado.dnp.dappnode.eth",
+    "validators_graffiti": "Avado",
+    "p2p_peer_lower_bound": 64,
+    "p2p_peer_upper_bound": 100,
+    "validators_proposer_default_fee_recipient": "",
+    "initial_state": "https://checkpoint-sync.goerli.ethpandaops.io",
+    "mev_boost": false
+}
