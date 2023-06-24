@@ -5,7 +5,7 @@ services:
     build:
       context: ./build
       args:
-        PRYSM_VERSION: v4.0.5
+        PRYSM_VERSION: v4.0.6
     volumes:
       - 'data:/data'
     ports:
