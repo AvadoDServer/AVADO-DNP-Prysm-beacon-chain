@@ -32,12 +32,14 @@ const RocketPoolLink = ({ validator, network }: Props) => {
     }
 
     useEffect(() => {
-        axios.get(`${apiUrl()}/api/v1/rocketpool/validator/${validator.validator.pubkey}`).then((res) => {
-            const result = res.data;
-            if (result.status === "OK") {
-                setMinipool(result.data.minipool_address)
-            }
-        })
+        if (validator.index !== "pending") {
+            axios.get(`${apiUrl()}/api/v1/rocketpool/validator/${validator.validator.pubkey}`).then((res) => {
+                const result = res.data;
+                if (result.status === "OK") {
+                    setMinipool(result.data.minipool_address)
+                }
+            }).catch(e => console.log(e))
+        }
     }, [validator]);
 
     const minipoolAddress = (minipool: string) => `${rocketscanUrl()}/minipool/${minipool}`
