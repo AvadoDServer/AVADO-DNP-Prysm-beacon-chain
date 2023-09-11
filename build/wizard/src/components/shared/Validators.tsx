@@ -44,7 +44,7 @@ export const createBeaconchainUrl = (network: Network | null | undefined, valida
     const beaconChainBaseUrl = ({
         "prater": "https://prater.beaconcha.in",
         "mainnet": "https://beaconcha.in",
-        "gnosis": "https://beacon.gnosischain.com"
+        "gnosis": "https://gnosischa.in"
     })[network ?? "mainnet"]
     return <a href={beaconChainBaseUrl + validatorPubkey} target="_blank" rel="noopener noreferrer">{text ? text : validatorPubkey}</a>;
 }
@@ -65,7 +65,7 @@ const Validators = ({ settings, api, readonly = false }: Props) => {
     }
 
     const updateValidators = React.useCallback(async () => {
-        console.log("Trying to update validators")
+        console.log("Fetch validator information from keymanager")
         api.get("/keymanager/eth/v1/keystores",
             (res) => {
                 if (res.status === 200) {
@@ -81,10 +81,14 @@ const Validators = ({ settings, api, readonly = false }: Props) => {
 
     React.useEffect(() => {
         updateValidators();
+        const interval = setInterval(() => {
+            updateValidators();
+        }, 60 * 1000); // refresh every minute
+        return () => clearInterval(interval);
     }, [api, settings, updateValidators])
 
     React.useEffect(() => {
-        const getFeeRecipient = async (pubKey: string) => {
+        const fetchFeeRecipient = async (pubKey: string) => {
             const result = (recipient: string) => ({ pubKey: pubKey, recipient: recipient })
 
             if (!settings?.validators_proposer_default_fee_recipient) {
@@ -139,9 +143,11 @@ const Validators = ({ settings, api, readonly = false }: Props) => {
 
         if (validators) {
             Promise.all(validators.map(pubKey => getValidatorData(pubKey))).then(result => setValidatorData(result))
-            Promise.all(validators.map(pubKey => getFeeRecipient(pubKey))).then(result => setFeeRecipients(result))
+            Promise.all(validators.map(pubKey => fetchFeeRecipient(pubKey))).then(result => setFeeRecipients(result))
         }
     }, [validators, settings?.validators_proposer_default_fee_recipient, api]);
+
+    // console.log(feeRecipients)
 
     function askConfirmationRemoveValidator(pubKey: string) {
         confirmAlert({
@@ -172,8 +178,8 @@ const Validators = ({ settings, api, readonly = false }: Props) => {
         console.log("Deleting " + pubKey);
         //https://ethereum.github.io/keymanager-APIs/#/Local%20Key%20Manager/DeleteKeys
         api.delete("/keymanager/eth/v1/keystores", { pubkeys: [pubKey] }, (res) => {
-            console.dir(res)
-            console.log(res)
+            // console.dir(res)
+            console.log("Slashing protection data", res)
             downloadSlashingData(res.data.slashing_protection)
             if (res.status === 200) {
                 updateValidators();
@@ -181,39 +187,6 @@ const Validators = ({ settings, api, readonly = false }: Props) => {
         }, (e) => {
             console.log(e)
             console.dir(e)
-        });
-    }
-
-    function askConfirmationExitValidator(pubKey: string) {
-        confirmAlert({
-            message: `Are you sure you want to exit validator "${pubKey}"?
-            Please make sure you understand the consequences of performing a voluntary exit.
-            Once an account is exited, the action cannot be reverted.`,
-            buttons: [
-                {
-                    label: 'Exit',
-                    onClick: () => exitValidator(pubKey)
-                },
-                {
-                    label: 'Cancel',
-                    onClick: () => { }
-                }
-            ]
-        });
-    }
-
-    const exitValidator = (pubKey: string) => {
-        console.log("Exiting " + pubKey);
-
-        api.post(`/exit_validator/${pubKey}`, {}, (res) => {
-            console.log(res.data)
-            if (res.status === 200) {
-                updateValidators();
-            }
-            alert(res.data);
-        }, (e) => {
-            console.log(e)
-            alert(e);
         });
     }
 
@@ -254,7 +227,7 @@ const Validators = ({ settings, api, readonly = false }: Props) => {
 
     const canExit = (validator: ValidatorData) => validator.status === "active_ongoing"
 
-    const getFeeRecipient = (feeRecipients: feeRecipientType[], pubkey: string) => feeRecipients.find(x => (x.pubKey === pubkey))?.recipient ?? "0x"
+    const getFeeRecipient = (feeRecipients: feeRecipientType[], pubkey: string) => feeRecipients.find(x => (x.pubKey === pubkey))?.recipient ?? "todo"
 
     return (
         <div>
@@ -310,7 +283,7 @@ const Validators = ({ settings, api, readonly = false }: Props) => {
                                     </thead>
                                     <tbody>
                                         {validatorData.sort((v1, v2) => parseInt(v1.index) - parseInt(v2.index)).map((validator, i) =>
-                                            <tr key={validator.index}>
+                                            <tr key={`validator-${i}`}>
                                                 <td>
                                                     {beaconchainUrl("/validator/" + validator.validator.pubkey, <span className="icon has-text-info"><FontAwesomeIcon className="icon" icon={faSatelliteDish} /></span>)}
                                                     <RocketPoolLink validator={validator} network={settings.network} />

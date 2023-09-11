@@ -30,27 +30,27 @@ const settings_file_path = '/data/settings.json';
 
 server.get("/ping", (req: restify.Request, res: restify.Response, next: restify.Next) => {
     res.send(200, "pong");
-    return next()
+    next()
 });
 
 server.get("/network", (req: restify.Request, res: restify.Response, next: restify.Next) => {
     res.send(200, server_config.network);
-    return next()
+    next()
 });
 
 server.get("/name", (req: restify.Request, res: restify.Response, next: restify.Next) => {
     res.send(200, server_config.name);
-    return next()
+    next()
 });
 
 server.get("/settings", (req: restify.Request, res: restify.Response, next: restify.Next) => {
     try {
         const settings = JSON.parse(fs.readFileSync(settings_file_path, 'utf8'))
         res.send(200, settings ? JSON.stringify(settings) : defaultsettings);
-        return next()
+        next()
     } catch (err) {
         res.send(200, defaultsettings);
-        return next();
+        next();
     }
 });
 
@@ -75,10 +75,10 @@ server.post("/settings", (req: restify.Request, res: restify.Response, next: res
 server.get("/defaultsettings", (req: restify.Request, res: restify.Response, next: restify.Next) => {
     try {
         res.send(200, defaultsettings);
-        return next()
+        next()
     } catch (err) {
         res.send(500, "failed")
-        return next();
+        next();
     }
 });
 
@@ -110,10 +110,10 @@ server.post("/service/stop", (req: restify.Request, res: restify.Response, next:
         supervisorCtl.callMethod(method, [server_config.name]),
     ]).then(result => {
         res.send(200, "stopped");
-        return next()
+        next()
     }).catch(err => {
         res.send(200, "failed")
-        return next();
+        next();
     })
 });
 
@@ -123,10 +123,10 @@ server.post("/service/start", (req: restify.Request, res: restify.Response, next
         supervisorCtl.callMethod(method, [server_config.name]),
     ]).then(result => {
         res.send(200, "started");
-        return next()
+        next()
     }).catch(err => {
         res.send(200, "failed")
-        return next();
+        next();
     })
 });
 
@@ -135,31 +135,12 @@ server.get("/service/status", (req: restify.Request, res: restify.Response, next
     supervisorCtl.callMethod(method, [])
         .then((value: any) => {
             res.send(200, value);
-            return next()
+            next()
         }).catch((_error: any) => {
             res.send(500, "failed")
-            return next();
+            next();
         });
 });
-
-////////////////////////
-// EXIT validator    ///
-////////////////////////
-
-server.post("/exit_validator/:pubkey", async (req: restify.Request, res: restify.Response, next: restify.Next) => {
-    const pubkey = req.params.pubkey
-    const url = `${server_config.keymanager_url}/exit_validator/${pubkey}`
-    const headers = {
-        'Content-Type': 'application/json'
-    }
-    axiosRequest(
-        url,
-        headers,
-        req,
-        res,
-        next
-    )
-})
 
 ////////////////////////
 // Checkpoint API    ///
@@ -197,15 +178,25 @@ const get = (url: string, res: restify.Response, next: restify.Next) => {
         (response: any) => {
             // console.dir(response.data.data)
             res.send(response.status, response.data.data)
-            return next();
+            next();
         }
-    ).catch(
-        (error: any) => {
-            console.log("Error contacting ", url, error);
-            res.send(500, "failed")
-            return next();
+    ).catch(function (error) {
+        console.log("Error contacting ", url, JSON.stringify(error));
+        console.log("config", JSON.stringify(error.config));
+        if (error.response) {
+            console.log('Error', error.response.data);
+            res.send(error.response.status, error.response.data)
+            next();
+        } else if (error.request) {
+            console.log(error.request);
+            res.send(500, error.request)
+            next();
+        } else {
+            console.log('Error', error.message);
+            res.send(500, error.message)
+            next();
         }
-    )
+    })
 }
 
 /////////////////////////////
@@ -213,6 +204,14 @@ const get = (url: string, res: restify.Response, next: restify.Next) => {
 /////////////////////////////
 
 server.get('/rest/*', (req: restify.Request, res: restify.Response, next: restify.Next) => {
+    processRestRequest(req, res, next);
+});
+
+server.post('/rest/*', (req: restify.Request, res: restify.Response, next: restify.Next) => {
+    processRestRequest(req, res, next);
+});
+
+const processRestRequest = (req: restify.Request, res: restify.Response, next: restify.Next) => {
     const path = req.params["*"]
     const url = `${server_config.rest_url}/${path}`
     const headers = {
@@ -225,7 +224,7 @@ server.get('/rest/*', (req: restify.Request, res: restify.Response, next: restif
         res,
         next
     )
-});
+}
 
 /////////////////////////////
 // Key manager API         //
@@ -269,11 +268,32 @@ const axiosRequest = (url: string, headers: object, req: restify.Request, res: r
         headers: headers,
     }).then((response: any) => {
         res.send(response.status, response.data)
-        return next();
-    }).catch((error: any) => {
-        console.log("Error", url, error.message);
-        return next();
+        next();
+    }).catch(function (error) {
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log('Error', error.response.data);
+            // console.log(error.response.status);
+            // console.log(error.response.headers);
+            res.send(error.response.status, error.response.data)
+            next();
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+            res.send(500, error.request)
+            next();
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+            res.send(500, error.message)
+            next();
+        }
+        console.log("config", JSON.stringify(error.config));
     });
+
 }
 
 server.listen(9999, function () {

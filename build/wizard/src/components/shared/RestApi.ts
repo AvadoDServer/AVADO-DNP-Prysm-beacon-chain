@@ -13,10 +13,7 @@ export class RestApi {
                 headers: {
                     Accept: "application/json"
                 }
-            }).then(res => {
-                // console.log(res)
-                return callback(res)
-            });
+            }).then(res => callback(res)).catch(e => errorHandler(e));
         } catch (e: any) {
             return errorHandler(e)
         }
@@ -26,7 +23,7 @@ export class RestApi {
         try {
             return await axios.post(`${this.baseUrl}${path}`, data, {
                 ...(data && { data: data })
-            }).then(res => callback(res));
+            }).then(res => callback(res)).catch(e => errorHandler(e));
         } catch (e: any) {
             errorHandler(e)
         }
@@ -36,7 +33,7 @@ export class RestApi {
         try {
             return await axios.delete(`${this.baseUrl}${path}`, {
                 ...(data && { data: data })
-            }).then(res => callback(res));
+            }).then(res => callback(res)).catch(e => errorHandler(e));
         } catch (e: any) {
             errorHandler(e)
         }

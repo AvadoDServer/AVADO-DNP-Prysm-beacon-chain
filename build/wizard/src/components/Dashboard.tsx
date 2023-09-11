@@ -93,7 +93,7 @@ const Comp = () => {
                         parsedSettings.execution_engine = "ethchain-geth.public.dappnode.eth"
                     }
                     setSettings(parsedSettings)
-                    console.log("Loaded settings: ", parsedSettings);
+                    // console.log("Loaded settings: ", parsedSettings);
                 } else {
                     //ERROR TODO
                 }

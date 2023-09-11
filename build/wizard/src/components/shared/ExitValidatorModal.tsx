@@ -24,16 +24,43 @@ const ExitValidatorModal = ({ validator, api, updateValidators, network }: Props
 
         setModalActive(false)
 
-        api.post(`/exit_validator/${pubKey}`, {}, (res) => {
-            console.log(res.data)
-            if (res.status === 200) {
-                triggerValidatorUpdates()
-            }
-            alert(res.data);
+        api.post(`/keymanager/eth/v1/validator/${pubKey}/voluntary_exit`, {}, (res) => {
+            // https://ethereum.github.io/keymanager-APIs/?urls.primaryName=dev#/Voluntary%20Exit
+            const exit_message = res.data.data
+
+            // https://ethereum.github.io/beacon-APIs/#/Beacon/submitPoolVoluntaryExit
+            console.log("exit message", JSON.stringify(exit_message))
+
+            api.post(`/rest/eth/v1/beacon/pool/voluntary_exits`, exit_message, (res) => {
+                console.log("voluntary_exits", res.data)
+                if (res.status === 200) {
+                    alert(`Exit initiated`)
+
+                    setTimeout(() => {
+                        updateValidators();
+                    }, 5000); // refresh validators after 5 seconds
+                }
+            }, (error) => {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    alert(error.response.data.message);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                    alert(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                    alert(error.message);
+                }
+            })
         }, (e) => {
             console.log(e)
-            alert("Exit request sent.");
-            triggerValidatorUpdates()
+            alert(e);
         });
     }
 
