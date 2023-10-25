@@ -1,7 +1,7 @@
 version: '3.4'
 services:
-  prysm-beacon-chain-prater.avado.dnp.dappnode.eth:
-    image: 'prysm-beacon-chain-prater.avado.dnp.dappnode.eth:0.0.33'
+  prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:
+    image: 'prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth:0.0.65'
     build:
       context: ./build
       args:
@@ -9,8 +9,8 @@ services:
     volumes:
       - 'data:/data'
     ports:
-      - '12007:12007/udp'
-      - '13007:13007'
+      - '12000:12000/udp'
+      - '13000:13000'
     restart: always
     environment:
       - EXTRA_OPTS=
