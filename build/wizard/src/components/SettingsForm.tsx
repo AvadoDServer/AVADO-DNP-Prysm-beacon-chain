@@ -39,6 +39,11 @@ const Comp = ({ name, settings, defaultSettings, applySettingsChanges, installed
             ee_endpoint: "http://ethchain-geth.my.ava.do:8551",
             network: "mainnet"
         }, {
+            name: "Reth",
+            packagename: "reth-mainnet.avado.dnp.dappnode.eth",
+            ee_endpoint: "http://reth-mainnet.my.ava.do:8551",
+            network: "mainnet"
+        }, {
             name: "Geth Goerli Testnet",
             packagename: "goerli-geth.avado.dnp.dappnode.eth",
             ee_endpoint: "http://goerli-geth.my.ava.do:8551",
