@@ -15,7 +15,7 @@
   "name": "prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth",
   "autoupdate": true,
   "title": "ETH2.0 Prysm beacon chain: Mainnet",
-  "version": "0.0.69",
+  "version": "0.0.70",
   "upstream": "v5.1.0",
   "shortDescription": "Prysm ETH2.0 Beacon chain (Mainnet)",
   "description": "ETH2 Mainnet beacon chain",
