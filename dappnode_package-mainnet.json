@@ -1,22 +1,15 @@
 {
   "image": {
-    "ports": [
-      "12000:12000/udp",
-      "13000:13000"
-    ],
-    "environment": [
-      "EXTRA_OPTS="
-    ],
-    "volumes": [
-      "data:/data"
-    ],
+    "ports": ["12000:12000/udp", "13000:13000"],
+    "environment": ["EXTRA_OPTS="],
+    "volumes": ["data:/data"],
     "restart": "always"
   },
   "name": "prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth",
   "autoupdate": true,
   "title": "ETH2.0 Prysm beacon chain: Mainnet",
-  "version": "0.0.68",
-  "upstream": "v5.0.2",
+  "version": "0.0.73",
+  "upstream": "v6.0.0",
   "shortDescription": "Prysm ETH2.0 Beacon chain (Mainnet)",
   "description": "ETH2 Mainnet beacon chain",
   "type": "service",
