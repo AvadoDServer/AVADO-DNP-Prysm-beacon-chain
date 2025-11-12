@@ -16,7 +16,7 @@ RUN rm -Rf build && yarn run build
 
 FROM --platform=linux/amd64 gcr.io/prysmaticlabs/prysm/beacon-chain:${PRYSM_VERSION} as prysm
 
-FROM --platform=linux/amd64 debian:buster-slim
+FROM --platform=linux/amd64 debian:bullseye-slim
 
 RUN apt update && \
     apt install -y \
