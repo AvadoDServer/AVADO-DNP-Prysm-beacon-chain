@@ -1,8 +1,15 @@
 {
   "image": {
-    "ports": ["12000:12000/udp", "13000:13000"],
-    "environment": ["EXTRA_OPTS="],
-    "volumes": ["data:/data"],
+    "ports": [
+      "12000:12000/udp",
+      "13000:13000"
+    ],
+    "environment": [
+      "EXTRA_OPTS="
+    ],
+    "volumes": [
+      "data:/data"
+    ],
     "restart": "always"
   },
   "name": "prysm-beacon-chain-mainnet.avado.dnp.dappnode.eth",
