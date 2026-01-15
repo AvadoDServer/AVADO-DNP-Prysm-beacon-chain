@@ -87,10 +87,9 @@ def update_docker_compose(file_path, new_version, new_upstream):
             updated_lines.append(line)
     
     with open(file_path, 'w') as f:
+        # When splitting by '\n', if content ends with '\n', we get an empty string at the end
+        # which is preserved by join, so no need to add an extra newline
         f.write('\n'.join(updated_lines))
-        # Preserve trailing newline if original file had one
-        if content.endswith('\n'):
-            f.write('\n')
 
 
 def main():
