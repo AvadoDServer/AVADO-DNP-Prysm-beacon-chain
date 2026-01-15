@@ -34,7 +34,7 @@ jobs:
         if: env.updated == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
           commit-message: 'chore: update Prysm to ${{ env.new_version }}'
           title: 'Update Prysm from ${{ env.old_version }} to ${{ env.new_version }}'
           body: |
