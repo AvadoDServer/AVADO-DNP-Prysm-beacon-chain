@@ -48,7 +48,7 @@ def increment_patch_version(version):
 
 
 def update_dappnode_package(file_path, new_version, new_upstream):
-    """Update version and upstream in dappnode_package-mainnet.json."""
+    """Update version and upstream in dappnode_package.json."""
     with open(file_path, 'r') as f:
         data = json.load(f)
     
@@ -66,7 +66,7 @@ def update_dappnode_package(file_path, new_version, new_upstream):
 
 
 def update_docker_compose(file_path, new_version, new_upstream):
-    """Update image tag and PRYSM_VERSION in docker-compose-mainnet.yml."""
+    """Update image tag and PRYSM_VERSION in docker-compose.yml."""
     with open(file_path, 'r') as f:
         content = f.read()
     
@@ -97,8 +97,8 @@ def main():
     repo_root = Path(__file__).parent.parent.parent
     
     # File paths - mainnet only
-    dappnode_package_path = repo_root / "dappnode_package-mainnet.json"
-    docker_compose_path = repo_root / "build" / "docker-compose-mainnet.yml"
+    dappnode_package_path = repo_root / "dappnode_package.json"
+    docker_compose_path = repo_root / "build" / "docker-compose.yml"
     
     print("Checking for Prysm updates...")
     
@@ -136,10 +136,10 @@ def main():
     print(f"New package version: {new_package_version}")
     
     # Update files
-    print("Updating dappnode_package-mainnet.json...")
+    print("Updating dappnode_package.json...")
     update_dappnode_package(dappnode_package_path, new_package_version, latest_prysm_version)
     
-    print("Updating build/docker-compose-mainnet.yml...")
+    print("Updating build/docker-compose.yml...")
     update_docker_compose(docker_compose_path, new_package_version, latest_prysm_version)
     
     print("Update complete!")
