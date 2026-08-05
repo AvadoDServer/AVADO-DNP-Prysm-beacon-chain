@@ -43,10 +43,14 @@ jobs:
             This PR updates the Prysm upstream version from **${{ env.old_version }}** to **${{ env.new_version }}** for mainnet only.
             
             ### Changes:
-            - Updated `upstream` in `dappnode_package-mainnet.json` to `${{ env.new_version }}`
-            - Incremented `version` in `dappnode_package-mainnet.json` to `${{ env.package_version }}`
-            - Updated `image` tag in `build/docker-compose-mainnet.yml` to `${{ env.package_version }}`
-            - Updated `PRYSM_VERSION` build argument in `build/docker-compose-mainnet.yml` to `${{ env.new_version }}`
+            `upstream` -> `${{ env.new_version }}` and `version` -> `${{ env.package_version }}` in:
+            - `dappnode_package.json`
+            - `dappnode_package-mainnet.json`
+
+            `image` tag -> `${{ env.package_version }}` and `PRYSM_VERSION` -> `${{ env.new_version }}` in:
+            - `docker-compose.yml` (published by the release action - the build arg here is what actually gets built)
+            - `build/docker-compose.yml`
+            - `build/docker-compose-mainnet.yml` (template `setNetwork.sh` hard-links over the live file)
             
             ### Release Notes:
             See [OffchainLabs/prysm releases](https://github.com/OffchainLabs/prysm/releases/tag/${{ env.new_version }})

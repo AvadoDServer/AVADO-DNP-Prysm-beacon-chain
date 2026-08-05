@@ -96,10 +96,26 @@ def main():
     # Get the repository root directory
     repo_root = Path(__file__).parent.parent.parent
     
-    # File paths - mainnet only
-    dappnode_package_path = repo_root / "dappnode_package.json"
-    docker_compose_path = repo_root / "build" / "docker-compose.yml"
-    
+    # File paths - mainnet only. Every file that carries the package version or
+    # the upstream version must move together:
+    #   - dappnode_package.json          the published manifest (canonical: current versions are read from it)
+    #   - docker-compose.yml             what the release action publishes; the build arg here is what
+    #                                    actually gets built, so skipping it ships a different client
+    #                                    than the manifest advertises
+    #   - build/docker-compose.yml       the build source
+    #   - *-mainnet.*                    templates that setNetwork.sh hard-links over the live files,
+    #                                    silently reverting the package if they lag behind
+    dappnode_package_paths = [
+        repo_root / "dappnode_package.json",
+        repo_root / "dappnode_package-mainnet.json",
+    ]
+    docker_compose_paths = [
+        repo_root / "docker-compose.yml",
+        repo_root / "build" / "docker-compose.yml",
+        repo_root / "build" / "docker-compose-mainnet.yml",
+    ]
+    canonical_package_path = dappnode_package_paths[0]
+
     print("Checking for Prysm updates...")
     
     # Get latest Prysm release
@@ -107,7 +123,7 @@ def main():
     print(f"Latest Prysm version: {latest_prysm_version}")
     
     # Read current upstream version
-    with open(dappnode_package_path, 'r') as f:
+    with open(canonical_package_path, 'r') as f:
         current_data = json.load(f)
     
     current_upstream = current_data.get('upstream', '')
@@ -136,12 +152,21 @@ def main():
     print(f"New package version: {new_package_version}")
     
     # Update files
-    print("Updating dappnode_package.json...")
-    update_dappnode_package(dappnode_package_path, new_package_version, latest_prysm_version)
-    
-    print("Updating build/docker-compose.yml...")
-    update_docker_compose(docker_compose_path, new_package_version, latest_prysm_version)
-    
+    missing = [p for p in dappnode_package_paths + docker_compose_paths if not p.exists()]
+    if missing:
+        print("Error: expected version-bearing files are missing:", file=sys.stderr)
+        for p in missing:
+            print(f"  {p.relative_to(repo_root)}", file=sys.stderr)
+        sys.exit(1)
+
+    for path in dappnode_package_paths:
+        print(f"Updating {path.relative_to(repo_root)}...")
+        update_dappnode_package(path, new_package_version, latest_prysm_version)
+
+    for path in docker_compose_paths:
+        print(f"Updating {path.relative_to(repo_root)}...")
+        update_docker_compose(path, new_package_version, latest_prysm_version)
+
     print("Update complete!")
     
     # Set GitHub Actions output
