@@ -25,10 +25,12 @@ case ${NETWORK} in
 "prater")
   P2P_TCP_PORT=13007
   P2P_UDP_PORT=12007
+  P2P_QUIC_PORT=13007
   ;;
 *)
   P2P_TCP_PORT=13000
   P2P_UDP_PORT=12000
+  P2P_QUIC_PORT=13000
   ;;
 esac
 
@@ -38,14 +40,15 @@ exec /bin/beaconchain \
   --${NETWORK} \
   --datadir=/data \
   --rpc-host=0.0.0.0 \
-  --grpc-gateway-host=0.0.0.0 \
+  --http-host=0.0.0.0 \
   --monitoring-host=0.0.0.0 \
-  --grpc-gateway-port=3500 \
+  --http-port=3500 \
   --accept-terms-of-use \
   --p2p-tcp-port=${P2P_TCP_PORT} \
   --p2p-udp-port=${P2P_UDP_PORT} \
+  --p2p-quic-port=${P2P_QUIC_PORT} \
   --execution-endpoint=${EE_ENDPOINT} \
-  --grpc-gateway-corsdomain="*" \
+  --http-cors-domain="*" \
   ${CHECKPOINT_SYNC_URL:+--checkpoint-sync-url=${CHECKPOINT_SYNC_URL}} \
   ${CHECKPOINT_SYNC_URL:+--genesis-beacon-api-url=${CHECKPOINT_SYNC_URL}} \
   ${VALIDATORS_PROPOSER_DEFAULT_FEE_RECIPIENT:+--suggested-fee-recipient=${VALIDATORS_PROPOSER_DEFAULT_FEE_RECIPIENT}} \
